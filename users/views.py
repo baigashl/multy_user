@@ -12,7 +12,7 @@ from .models import CustomUser
 from .serializers import (
     RegisterSerializer,
     UserDetailSerializer,
-    UserAccountSerializer, RegisterOrgUserSerializers
+    UserAccountSerializer, RegisterOrgUserSerializers, OrgUserDetailSerializer
 )
 from rest_framework import generics, status
 from .permissions import AnonPermissionOnly
@@ -43,13 +43,6 @@ class OrgUserListApiView(ListCreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserListAPIView(ListAPIView):
-    permission_classes = []
-    serializer_class = UserAccountSerializer
-    # search_fields = ('user__username', 'content')
-    queryset = CustomUser.objects.all()
-
-
 class UserDetailAPIView(UpdateModelMixin, DestroyModelMixin, RetrieveAPIView):
     queryset = CustomUser.objects.filter(is_active=True)
     serializer_class = UserDetailSerializer
@@ -57,6 +50,22 @@ class UserDetailAPIView(UpdateModelMixin, DestroyModelMixin, RetrieveAPIView):
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
+class UserListAPIView(ListAPIView):
+    permission_classes = []
+    serializer_class = UserAccountSerializer
+    # search_fields = ('user__username', 'content')
+    queryset = CustomUser.objects.all()
+
+
+class OrgUserDetailAPIView(UpdateModelMixin, DestroyModelMixin, RetrieveAPIView):
+    queryset = OrganizationUser.objects.all()
+    serializer_class = OrgUserDetailSerializer
+    permission_classes = []
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)

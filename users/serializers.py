@@ -110,10 +110,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 class RegisterOrgUserSerializers(serializers.ModelSerializer):
     user = UserSerializer(required=True)
+    url = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = OrganizationUser
-        fields = ['user', 'organization']
+        fields = ['id', 'url', 'user', 'organization']
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
@@ -128,6 +129,48 @@ class RegisterOrgUserSerializers(serializers.ModelSerializer):
             organization=validated_data['organization']
         )
         return organization_user
+
+    def get_url(self, obj):
+        request = self.context.get('request')
+        return reverse("org_user-detail", kwargs={"pk": obj.id}, request=request)
+
+
+class OrgUserDetailSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    url = serializers.SerializerMethodField(read_only=True)
+    organization = serializers.SerializerMethodField()
+
+    class Meta:
+        model = OrganizationUser
+        fields = [
+            'id',
+            'url',
+            'user',
+            'organization'
+        ]
+        read_only_fields = ['user']
+
+    def get_url(self, obj):
+        request = self.context.get('request')
+        return reverse("org_user-detail", kwargs={"pk": obj.id}, request=request)
+
+    def get_organization(self, obj):
+        qs = Organization.objects.filter(
+            organization_users=obj.id
+        )
+        return AccountInlineSerializers(qs, many=True).data
+
+
+class OrgUserSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = OrganizationUser
+        fields = [
+            'user',
+            'organization'
+        ]
+        read_only_fields = ['user']
 
 
 

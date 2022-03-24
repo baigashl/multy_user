@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from organizations.abstract import (
     AbstractOrganization,
     AbstractOrganizationUser,
@@ -12,8 +13,26 @@ from organizations.models import (
 from users.models import CustomUser
 
 
+def upload_path(instance, filename):
+    return 'account/{image_name}'.format(
+        image_name=filename
+    )
+
+
 class Account(Organization):
-    pass
+    description = models.TextField()
+    deleted = models.BooleanField(default=False)
+    featured = models.BooleanField(default=False)
+    lat = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True)
+    lng = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True)
+
+
+class Image(models.Model):
+    account_id = models.ForeignKey(
+                    Organization,
+                    on_delete=models.CASCADE
+                )
+    images = models.ImageField(upload_to=upload_path, null=True, blank=True)
 
 
 # class AccountUser(OrganizationUser):
