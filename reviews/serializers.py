@@ -28,6 +28,7 @@ class ReviewSerializer(serializers.ModelSerializer):
             'program',
             'cleanliness',
             'teacher',
+            'rating_average',
         ]
         read_only_fields = ['user']
 
