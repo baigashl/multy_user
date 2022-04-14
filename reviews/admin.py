@@ -1,4 +1,7 @@
 from django.contrib import admin
-from .models import Review
+from .models import ReviewOffice, ReviewSchool, ReviewKindergarten
 
-admin.site.register(Review)
+
+admin.site.register(ReviewOffice)
+admin.site.register(ReviewSchool)
+admin.site.register(ReviewKindergarten)

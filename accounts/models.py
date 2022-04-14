@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from organizations.abstract import (
     AbstractOrganization,
@@ -19,7 +20,20 @@ def upload_path(instance, filename):
     )
 
 
+class Category(models.Model):
+    name_category = models.CharField(max_length=255)
+    update = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name_category
+
+    def get_absolute_url(self):
+        return reverse('detail_category', kwargs={'pk': self.pk})
+
+
 class Account(Organization):
+    account_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='cat')
     description = models.TextField()
     deleted = models.BooleanField(default=False)
     featured = models.BooleanField(default=False)
@@ -29,7 +43,7 @@ class Account(Organization):
 
 class Image(models.Model):
     account_id = models.ForeignKey(
-                    Organization,
+                    Account,
                     on_delete=models.CASCADE
                 )
     images = models.ImageField(upload_to=upload_path, null=True, blank=True)

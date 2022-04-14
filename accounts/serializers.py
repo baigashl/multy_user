@@ -1,12 +1,14 @@
+from django.http import JsonResponse
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from organizations.models import (
     OrganizationUser,
     Organization,
 )
-from accounts.models import Image, Account
-from reviews.models import Review
-from reviews.serializers import ReviewSerializer
+from accounts.models import Image, Account, Category
+# from reviews.models import Review
+# from reviews.serializers import ReviewSerializer
+from reviews.serializers import CreateReviewOffice, CreateReviewKindergarten, CreateReviewSchool
 from users.users_nested.serializers import OrganizationUserSerializer
 
 
@@ -24,7 +26,9 @@ class AccountDetailSerializers(serializers.ModelSerializer):
     url = serializers.SerializerMethodField(read_only=True)
     user = serializers.SerializerMethodField(read_only=True)
     images = serializers.SerializerMethodField(read_only=True)
-    reviews = serializers.SerializerMethodField(read_only=True)
+    review_office = CreateReviewOffice(many=True, read_only=True)
+    review_school = CreateReviewSchool(many=True, read_only=True)
+    review_cat_kindergarten = CreateReviewKindergarten(many=True, read_only=True)
 
     class Meta:
         model = Account
@@ -35,9 +39,16 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             'user',
             'owner',
             'images',
-            'reviews'
+            'review_office',
+            'review_school',
+            'review_cat_kindergarten'
         ]
-        read_only_fields = ['id', 'user', 'owner', 'url']
+        read_only_fields = [
+            'id',
+            'user',
+            'owner',
+            'url',
+        ]
 
     def get_url(self, obj):
         request = self.context.get('request')
@@ -55,24 +66,24 @@ class AccountDetailSerializers(serializers.ModelSerializer):
         )
         return ImageSerializer(qs, many=True).data
 
-    def get_reviews(self, obj):
-        qs = Review.objects.filter(
-            account=obj
-        )
-        return ReviewSerializer(qs, many=True).data
-
+    # def get_reviews(self, obj):
+    #     qs = Review.objects.filter(
+    #         account=obj
+    #     )
+    #     return ReviewSerializer(qs, many=True).data
 
 
 class AccountSerializers(serializers.ModelSerializer):
     url = serializers.SerializerMethodField(read_only=True)
     images = serializers.SerializerMethodField(read_only=True)
-    # images = ImageSerializer(read_only=True)
+    # images = ImageSerializer(many=True)
 
     class Meta:
         model = Account
         fields = [
             'id',
             'url',
+            'account_category',
             'name',
             'users',
             'owner',
@@ -101,7 +112,48 @@ class AccountSerializers(serializers.ModelSerializer):
         qs = Image.objects.filter(
             account_id=obj
         )
-        return ImageSerializer(qs, many=True).data
+        quantity = Image.objects.filter(
+            account_id=obj
+        ).count()
+        imgs = []
+        for i in range(quantity):
+            imgs.append(ImageSerializer(qs, many=True).data[i]['images'])
+        return imgs
+        # return ImageSerializer(qs, many=True).data
+
+
+class CategoryListSerializer(serializers.ModelSerializer):
+    url_category = serializers.SerializerMethodField(read_only=True)
+    cat = AccountSerializers(many=True)
+
+    class Meta:
+        model = Category
+        fields = [
+            'name_category',
+            'update',
+            'timestamp',
+            'url_category',
+            'cat'
+        ]
+
+    def get_url_category(self, obj):
+        return reverse('detail_category', kwargs={'pk': obj.id})
+
+
+class CategoryListSerializerTest(serializers.ModelSerializer):
+    url_category = serializers.SerializerMethodField(read_only=True)
+
+    def get_url_category(self, obj):
+        return reverse('detail_category', kwargs={'pk': obj.id})
+
+    class Meta:
+        model = Category
+        fields = [
+            'name_category',
+            'update',
+            'timestamp',
+            'url_category',
+        ]
 
 
 class OrganizationCreateSerializer(serializers.ModelSerializer):
