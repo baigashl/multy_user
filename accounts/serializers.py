@@ -10,6 +10,7 @@ from accounts.models import Image, Account, Category
 # from reviews.serializers import ReviewSerializer
 from reviews.serializers import CreateReviewOffice, CreateReviewKindergarten, CreateReviewSchool
 from users.users_nested.serializers import OrganizationUserSerializer
+from gallery.serializers import GalleryVideoSerializer, GalleryImageSerializer
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -23,9 +24,11 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class AccountDetailSerializers(serializers.ModelSerializer):
+    gallery_img = GalleryImageSerializer(many=True, read_only=True)
+    gallery_video = GalleryVideoSerializer(many=True, read_only=True)
     url = serializers.SerializerMethodField(read_only=True)
     user = serializers.SerializerMethodField(read_only=True)
-    images = serializers.SerializerMethodField(read_only=True)
+    # images = serializers.SerializerMethodField(read_only=True)
     review_office = CreateReviewOffice(many=True, read_only=True)
     review_school = CreateReviewSchool(many=True, read_only=True)
     review_cat_kindergarten = CreateReviewKindergarten(many=True, read_only=True)
@@ -38,10 +41,11 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             'name',
             'user',
             'owner',
-            'images',
             'review_office',
             'review_school',
-            'review_cat_kindergarten'
+            'review_cat_kindergarten',
+            'gallery_img',
+            'gallery_video'
         ]
         read_only_fields = [
             'id',
@@ -60,11 +64,11 @@ class AccountDetailSerializers(serializers.ModelSerializer):
         )
         return OrganizationUserSerializer(qs, many=True).data
 
-    def get_images(self, obj):
-        qs = Image.objects.filter(
-            account_id=obj
-        )
-        return ImageSerializer(qs, many=True).data
+    # def get_images(self, obj):
+    #     qs = Image.objects.filter(
+    #         account_id=obj
+    #     )
+    #     return ImageSerializer(qs, many=True).data
 
     # def get_reviews(self, obj):
     #     qs = Review.objects.filter(
