@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'accounts',
     'account_owner',
     'reviews',
+    'gallery'
 ]
 
 MIDDLEWARE = [

@@ -62,19 +62,20 @@ class DetailOffice(
     mixins.DestroyModelMixin,
     mixins.UpdateModelMixin,
     generics.RetrieveAPIView,
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin
 ):
     permission_classes = []
     queryset = ReviewOffice.objects.all()
     serializer_class = CreateReviewOffice
     lookup_field = 'id'
 
-    def put(self, *args, **kwargs):
-        return self.update(*args, **kwargs)
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
-    def patch(self, *args, **kwargs):
-        return self.update(*args, **kwargs)
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
 
 class ListSchool(mixins.CreateModelMixin, generics.ListAPIView):
@@ -99,19 +100,20 @@ class DetailSchool(
     mixins.DestroyModelMixin,
     mixins.UpdateModelMixin,
     generics.RetrieveAPIView,
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin
 ):
     permission_classes = []
     queryset = ReviewSchool.objects.all()
     serializer_class = CreateReviewSchool
     lookup_field = 'id'
 
-    def put(self, *args, **kwargs):
-        return self.update(*args, **kwargs)
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
-    def patch(self, *args, **kwargs):
-        return self.update(*args, **kwargs)
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
 class ListKindergarten(mixins.CreateModelMixin, generics.ListAPIView):
     permission_classes = []
@@ -135,19 +137,20 @@ class DetailKindergarten(
     mixins.DestroyModelMixin,
     mixins.UpdateModelMixin,
     generics.RetrieveAPIView,
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin
 ):
     permission_classes = []
     queryset = ReviewKindergarten.objects.all()
     serializer_class = CreateReviewKindergarten
     lookup_field = 'id'
 
-    def put(self, *args, **kwargs):
-        return self.update(*args, **kwargs)
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
-    def patch(self, *args, **kwargs):
-        return self.update(*args, **kwargs)
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
 
 

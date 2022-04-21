@@ -134,7 +134,7 @@ class ReviewOffice(models.Model):
     rating_average.short_description = "Avg."
 
     def __str__(self):
-        return f"{self.review}: {self.rating_average}"
+        return f"{self.review}"
 
     def get_absolute_url(self):
         return reverse('detail_office', kwargs={'pk': self.pk})
