@@ -11,6 +11,7 @@ from organizations.models import (
     OrganizationUser
 )
 
+from accounts import managers
 from users.models import CustomUser
 
 
@@ -18,6 +19,30 @@ def upload_path(instance, filename):
     return 'account/{image_name}'.format(
         image_name=filename
     )
+
+
+class AbstractItem(models.Model):
+
+    """ Abstract Item """
+
+    name = models.CharField(max_length=80)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    objects = managers.CustomModelManager()
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.name
+
+
+class Amenity(AbstractItem):
+
+    """ Amenity Model Definition """
+
+    class Meta:
+        verbose_name_plural = "Amenities"
 
 
 class Category(models.Model):
@@ -39,6 +64,8 @@ class Account(Organization):
     featured = models.BooleanField(default=False)
     lat = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True)
     lng = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True)
+
+    amenities = models.ManyToManyField(Amenity, related_name="accounts", blank=True)
 
 
 class Image(models.Model):

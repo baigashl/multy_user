@@ -5,7 +5,7 @@ from organizations.models import (
     OrganizationUser,
     Organization,
 )
-from accounts.models import Image, Account, Category
+from accounts.models import Image, Account, Category, Amenity
 # from reviews.models import Review
 # from reviews.serializers import ReviewSerializer
 from reviews.serializers import CreateReviewOffice, CreateReviewKindergarten, CreateReviewSchool
@@ -23,6 +23,13 @@ class ImageSerializer(serializers.ModelSerializer):
         )
 
 
+class AmenitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Amenity
+        fields = ('name',)
+
+
 class AccountDetailSerializers(serializers.ModelSerializer):
     gallery_img = GalleryImageSerializer(many=True, read_only=True)
     gallery_video = GalleryVideoSerializer(many=True, read_only=True)
@@ -32,6 +39,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
     review_office = CreateReviewOffice(many=True, read_only=True)
     review_school = CreateReviewSchool(many=True, read_only=True)
     review_cat_kindergarten = CreateReviewKindergarten(many=True, read_only=True)
+    # amenities = AmenitySerializer(many=True)
 
     class Meta:
         model = Account
@@ -45,7 +53,8 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             'review_school',
             'review_cat_kindergarten',
             'gallery_img',
-            'gallery_video'
+            'gallery_video',
+            'amenities',
         ]
         read_only_fields = [
             'id',
