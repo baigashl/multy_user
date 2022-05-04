@@ -45,7 +45,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
     gallery_img = serializers.SerializerMethodField(read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
     url = serializers.SerializerMethodField(read_only=True)
-    account_category = CatSerializer()
+    account_category = serializers.CharField(source='account_category.name_category')
     user = serializers.SerializerMethodField(read_only=True)
     review_office = CreateReviewOffice(many=True, read_only=True)
     review_school = CreateReviewSchool(many=True, read_only=True)
@@ -110,7 +110,7 @@ class AccountSerializers(serializers.ModelSerializer):
     url = serializers.SerializerMethodField(read_only=True)
     gallery_img = serializers.SerializerMethodField(read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
-    account_category = CatSerializer(read_only=True)
+    account_category = serializers.CharField(source='account_category.name_category')
 
     class Meta:
         model = Account
