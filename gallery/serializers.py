@@ -73,7 +73,7 @@ class GalleryImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = GalleryImg
         fields = [
-            'post', 'img'
+            'img'
         ]
 
 
@@ -83,11 +83,9 @@ class GalleryVideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = GalleryVideo
         fields = [
-            'post', 'video'
+            'video'
         ]
 
-
-#  Post
 
 class PostSerializer(serializers.ModelSerializer):
     gallery_img = GalleryImageSerializer(many=True, read_only=True)

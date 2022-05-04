@@ -8,12 +8,23 @@ from organizations.models import (
 from accounts.models import Image, Account, Category, Amenity
 # from reviews.models import Review
 # from reviews.serializers import ReviewSerializer
+from gallery.models import PostImg, GalleryImg, GalleryVideo, PostVideo
 from reviews.serializers import CreateReviewOffice, CreateReviewKindergarten, CreateReviewSchool
 from users.users_nested.serializers import OrganizationUserSerializer
 from gallery.serializers import GalleryVideoSerializer, GalleryImageSerializer
 
 
 class ImageSerializer(serializers.ModelSerializer):
+    #max 50 images
+    class Meta:
+        model = Image
+        fields = (
+            # 'account_id',
+            'images',
+        )
+
+
+class ImageGallerySerializer(serializers.ModelSerializer):
     #max 50 images
     class Meta:
         model = Image
@@ -31,8 +42,9 @@ class AmenitySerializer(serializers.ModelSerializer):
 
 
 class AccountDetailSerializers(serializers.ModelSerializer):
-    gallery_img = GalleryImageSerializer(many=True, read_only=True)
-    gallery_video = GalleryVideoSerializer(many=True, read_only=True)
+    gallery_img = serializers.SerializerMethodField(read_only=True)
+    # gallery_video = GalleryVideoSerializer(many=True, read_only=True)
+    gallery_video = serializers.SerializerMethodField(read_only=True)
     url = serializers.SerializerMethodField(read_only=True)
     user = serializers.SerializerMethodField(read_only=True)
     # images = serializers.SerializerMethodField(read_only=True)
@@ -73,23 +85,30 @@ class AccountDetailSerializers(serializers.ModelSerializer):
         )
         return OrganizationUserSerializer(qs, many=True).data
 
-    # def get_images(self, obj):
-    #     qs = Image.objects.filter(
-    #         account_id=obj
-    #     )
-    #     return ImageSerializer(qs, many=True).data
+    def get_gallery_img(self, obj):
+        gallery_qs = GalleryImg.objects.filter(post=obj).all()
+        gallery_count = PostImg.objects.filter(gallery=gallery_qs.first()).count()
 
-    # def get_reviews(self, obj):
-    #     qs = Review.objects.filter(
-    #         account=obj
-    #     )
-    #     return ReviewSerializer(qs, many=True).data
+        imgs = []
+
+        for i in range(gallery_count):
+            imgs.append(GalleryImageSerializer(gallery_qs, many=True).data[0]['img'][i]['image'])
+        return imgs
+
+    def get_gallery_video(self, obj):
+        gallery_qs = GalleryVideo.objects.filter(post=obj).all()
+        gallery_count = PostVideo.objects.filter(gallery=gallery_qs.first()).count()
+
+        vids = []
+
+        for i in range(gallery_count):
+            vids.append(GalleryVideoSerializer(gallery_qs, many=True).data[0]['video'][i]['video'])
+        return vids
 
 
 class AccountSerializers(serializers.ModelSerializer):
     url = serializers.SerializerMethodField(read_only=True)
     images = serializers.SerializerMethodField(read_only=True)
-    # images = ImageSerializer(many=True)
 
     class Meta:
         model = Account
@@ -132,7 +151,6 @@ class AccountSerializers(serializers.ModelSerializer):
         for i in range(quantity):
             imgs.append(ImageSerializer(qs, many=True).data[i]['images'])
         return imgs
-        # return ImageSerializer(qs, many=True).data
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
