@@ -43,15 +43,13 @@ class AmenitySerializer(serializers.ModelSerializer):
 
 class AccountDetailSerializers(serializers.ModelSerializer):
     gallery_img = serializers.SerializerMethodField(read_only=True)
-    # gallery_video = GalleryVideoSerializer(many=True, read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
     url = serializers.SerializerMethodField(read_only=True)
     user = serializers.SerializerMethodField(read_only=True)
-    # images = serializers.SerializerMethodField(read_only=True)
     review_office = CreateReviewOffice(many=True, read_only=True)
     review_school = CreateReviewSchool(many=True, read_only=True)
     review_cat_kindergarten = CreateReviewKindergarten(many=True, read_only=True)
-    # amenities = AmenitySerializer(many=True)
+
 
     class Meta:
         model = Account
@@ -108,7 +106,8 @@ class AccountDetailSerializers(serializers.ModelSerializer):
 
 class AccountSerializers(serializers.ModelSerializer):
     url = serializers.SerializerMethodField(read_only=True)
-    images = serializers.SerializerMethodField(read_only=True)
+    gallery_img = serializers.SerializerMethodField(read_only=True)
+    gallery_video = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Account
@@ -119,7 +118,8 @@ class AccountSerializers(serializers.ModelSerializer):
             'name',
             'users',
             'owner',
-            'images'
+            'gallery_img',
+            'gallery_video',
         ]
         read_only_fields = ['owner']
 
@@ -140,17 +140,26 @@ class AccountSerializers(serializers.ModelSerializer):
         request = self.context.get('request')
         return reverse("detail-organization", kwargs={"id": obj.id}, request=request)
 
-    def get_images(self, obj):
-        qs = Image.objects.filter(
-            account_id=obj
-        )
-        quantity = Image.objects.filter(
-            account_id=obj
-        ).count()
+
+    def get_gallery_img(self, obj):
+        gallery_qs = GalleryImg.objects.filter(post=obj).all()
+        gallery_count = PostImg.objects.filter(gallery=gallery_qs.first()).count()
+
         imgs = []
-        for i in range(quantity):
-            imgs.append(ImageSerializer(qs, many=True).data[i]['images'])
+
+        for i in range(gallery_count):
+            imgs.append(GalleryImageSerializer(gallery_qs, many=True).data[0]['img'][i]['image'])
         return imgs
+
+    def get_gallery_video(self, obj):
+        gallery_qs = GalleryVideo.objects.filter(post=obj).all()
+        gallery_count = PostVideo.objects.filter(gallery=gallery_qs.first()).count()
+
+        vids = []
+
+        for i in range(gallery_count):
+            vids.append(GalleryVideoSerializer(gallery_qs, many=True).data[0]['video'][i]['video'])
+        return vids
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
