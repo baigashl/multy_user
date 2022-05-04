@@ -24,13 +24,13 @@ class ImageSerializer(serializers.ModelSerializer):
         )
 
 
-class ImageGallerySerializer(serializers.ModelSerializer):
-    #max 50 images
+class CatSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = Image
+        model = Category
         fields = (
-            # 'account_id',
-            'images',
+
+            'name_category',
         )
 
 
@@ -45,6 +45,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
     gallery_img = serializers.SerializerMethodField(read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
     url = serializers.SerializerMethodField(read_only=True)
+    account_category = CatSerializer(read_only=True)
     user = serializers.SerializerMethodField(read_only=True)
     review_office = CreateReviewOffice(many=True, read_only=True)
     review_school = CreateReviewSchool(many=True, read_only=True)
@@ -57,6 +58,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             'url',
             'id',
             'name',
+            'account_category',
             'user',
             'owner',
             'review_office',
