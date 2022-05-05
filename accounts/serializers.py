@@ -51,7 +51,6 @@ class AccountDetailSerializers(serializers.ModelSerializer):
     review_school = CreateReviewSchool(many=True, read_only=True)
     review_cat_kindergarten = CreateReviewKindergarten(many=True, read_only=True)
 
-
     class Meta:
         model = Account
         fields = [
@@ -110,7 +109,6 @@ class AccountSerializers(serializers.ModelSerializer):
     url = serializers.SerializerMethodField(read_only=True)
     gallery_img = serializers.SerializerMethodField(read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
-    account_category = serializers.CharField(source='account_category.name_category')
 
     class Meta:
         model = Account
@@ -142,6 +140,12 @@ class AccountSerializers(serializers.ModelSerializer):
     def get_url(self, obj):
         request = self.context.get('request')
         return reverse("detail-organization", kwargs={"id": obj.id}, request=request)
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+
+        response['account_category'] = CatSerializer(instance.account_category).data['name_category']
+        return response
 
 
     def get_gallery_img(self, obj):
