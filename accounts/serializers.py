@@ -38,14 +38,17 @@ class AmenitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Amenity
-        fields = ('name',)
+        fields = (
+
+            'name',
+        )
 
 
 class AccountDetailSerializers(serializers.ModelSerializer):
     gallery_img = serializers.SerializerMethodField(read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
     url = serializers.SerializerMethodField(read_only=True)
-    account_category = serializers.CharField(source='account_category.name_category')
+    # account_category = serializers.CharField(source='account_category.name_category')
     user = serializers.SerializerMethodField(read_only=True)
     review_office = CreateReviewOffice(many=True, read_only=True)
     review_school = CreateReviewSchool(many=True, read_only=True)
@@ -104,8 +107,20 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             vids.append(GalleryVideoSerializer(gallery_qs, many=True).data[0]['video'][i]['video'])
         return vids
 
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        amenity = response.pop("amenities")
+        response['amenities'] = []
+        for i in range(len(amenity)):
+            response['amenities'].append(AmenitySerializer(instance.amenities.all(), many=True).data[i]['name'])
+        response['account_category'] = CatSerializer(instance.account_category).data['name_category']
+        return response
+
 
 class AccountSerializers(serializers.ModelSerializer):
+    """
+    organization list and create serializer
+    """
     url = serializers.SerializerMethodField(read_only=True)
     gallery_img = serializers.SerializerMethodField(read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
@@ -119,6 +134,7 @@ class AccountSerializers(serializers.ModelSerializer):
             'name',
             'users',
             'owner',
+            'amenities',
             'gallery_img',
             'gallery_video',
         ]
@@ -143,7 +159,10 @@ class AccountSerializers(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
-
+        amenity = response.pop("amenities")
+        response['amenities'] = []
+        for i in range(len(amenity)):
+            response['amenities'].append(AmenitySerializer(instance.amenities.all(), many=True).data[i]['name'])
         response['account_category'] = CatSerializer(instance.account_category).data['name_category']
         return response
 
@@ -204,7 +223,9 @@ class CategoryListSerializerTest(serializers.ModelSerializer):
 
 
 class OrganizationCreateSerializer(serializers.ModelSerializer):
-
+    """
+    organization create serializer
+    """
     class Meta:
         model = Organization
         fields = ['name']
