@@ -138,7 +138,7 @@ class AccountSerializers(serializers.ModelSerializer):
             'gallery_img',
             'gallery_video',
         ]
-        read_only_fields = ['owner']
+        read_only_fields = ['owner', 'amenities']
 
     def create(self, validated_data):
         images = self.context['request'].FILES
