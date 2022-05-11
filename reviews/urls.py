@@ -8,10 +8,6 @@ from reviews.views import (
 )
 
 urlpatterns = [
-    # path('category/', ListCategory.as_view(), name='category'),
-    # path('category/<int:pk>/', DetailCategory.as_view(), name='detail_category'),
-    # path('post/', ListPost.as_view(), name='post'),
-    # path('post/<int:pk>/', DetailPost.as_view(), name='detail_post'),
     path('office/', ListOffice.as_view(), name='office'),
     path('office/<int:id>/', DetailOffice.as_view(), name='detail_office'),
     path('school/', ListSchool.as_view(), name='school'),

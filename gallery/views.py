@@ -1,33 +1,19 @@
-from django.contrib.auth.models import User
-from django.shortcuts import render
-import json
-
-from django.db.models import Avg
-from django.shortcuts import get_object_or_404
 from rest_framework import mixins, generics, permissions, viewsets, status
-from rest_framework.decorators import action, api_view, throttle_classes
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-from rest_framework.throttling import UserRateThrottle
-from rest_framework.mixins import CreateModelMixin, ListModelMixin
 from .serializers import (
     CreateImageSerializer, CreateVideoSerializer,
     GalleryImageSerializer, GalleryVideoSerializer,
     ListImageSerializer, ListVideoSerializer,
-    PostSerializer, PostSerializerList,
-    CreateImgSerializer
 )
 from .models import (
     PostImg, PostVideo,
     GalleryVideo, GalleryImg,
 )
-from .permissions import IsOwner
 
 
 class ViewSet(viewsets.ModelViewSet):
     """
-       A viewset that provides the standard actions
-       """
+    A viewset that provides the standard actions
+    """
     queryset = PostImg.objects.all()
     serializer_class = CreateImageSerializer
 
@@ -177,40 +163,3 @@ class DetailVideoGallery(
 
     def patch(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
-
-
-# class ListPost(mixins.CreateModelMixin, generics.ListAPIView):
-#     permission_classes = []
-#     # authentication_classes = [SessionAuthentication]
-#     serializer_class = PostSerializerList
-#     passed_id = None
-#
-#     def get_queryset(self):
-#         request = self.request
-#         qs = Account.objects.all()
-#         query = request.GET.get('q')
-#         if query is not None:
-#             qs = qs.filter(content__icontains=query)
-#         return qs
-#
-#     def post(self, *args, **kwargs):
-#         return self.create(*args, **kwargs)
-
-
-# class DetailPost(
-#     mixins.DestroyModelMixin,
-#     mixins.UpdateModelMixin,
-#     generics.RetrieveAPIView,
-#     mixins.CreateModelMixin,
-#     mixins.ListModelMixin
-# ):
-#     permission_classes = []
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-#
-#     def put(self, *args, **kwargs):
-#         return self.update(*args, **kwargs)
-#
-#     def patch(self, *args, **kwargs):
-#         return self.update(*args, **kwargs)
-

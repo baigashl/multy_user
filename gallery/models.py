@@ -1,8 +1,5 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
-from django.db.models import Sum
-from django.urls import reverse
-# from pytz import unicode
 from rest_framework.exceptions import ValidationError
 
 

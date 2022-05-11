@@ -1,10 +1,8 @@
 from accounts.models import Account
-from users.models import CustomUser
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from reviews.models import ReviewSchool, ReviewOffice, ReviewKindergarten
-from users.serializers import UserAccountSerializer
 
 
 class CreateReviewSchool(serializers.ModelSerializer):

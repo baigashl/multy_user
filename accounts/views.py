@@ -33,7 +33,6 @@ class OrganizationListAPIView(CreateModelMixin, ListAPIView):
         return self.create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
-        old_obj = self.request.data
         org = serializer.save()
         user = self.request.user
         org_user = OrganizationUser.objects.create(

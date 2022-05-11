@@ -2,7 +2,6 @@ from organizations.models import OrganizationUser
 from rest_framework.generics import (
     RetrieveAPIView, ListAPIView, ListCreateAPIView
 )
-# from rest_framework.mixins import CreateModelMixin
 from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView

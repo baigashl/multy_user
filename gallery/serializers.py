@@ -6,11 +6,6 @@ from .models import (
     PostImg, GalleryImg,
     PostVideo, GalleryVideo
 )
-#  git stash
-#  git pull origin master
-
-
-#  Create
 
 
 class CreateImgSerializer(serializers.ModelSerializer):
@@ -36,11 +31,6 @@ class CreateImageSerializer(serializers.ModelSerializer):
             'gallery', 'image'
         ]
 
-        # def validate(self, data):
-        #     gallery_id = data.get('gallery_id', None)
-        #     if PostImg.objects.values(gallery_id).count()<2:
-        #         gallery_id = 0
-        #     return data
 
 
 class ListImageSerializer(serializers.ModelSerializer):
@@ -73,7 +63,7 @@ class GalleryImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = GalleryImg
         fields = [
-            'img'
+            'img', 'post'
         ]
 
 

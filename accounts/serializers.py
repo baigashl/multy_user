@@ -1,4 +1,3 @@
-from django.http import JsonResponse
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from organizations.models import (
@@ -6,8 +5,6 @@ from organizations.models import (
     Organization,
 )
 from accounts.models import Image, Account, Category, Amenity
-# from reviews.models import Review
-# from reviews.serializers import ReviewSerializer
 from gallery.models import PostImg, GalleryImg, GalleryVideo, PostVideo
 from reviews.serializers import CreateReviewOffice, CreateReviewKindergarten, CreateReviewSchool
 from users.users_nested.serializers import OrganizationUserSerializer
@@ -15,11 +12,10 @@ from gallery.serializers import GalleryVideoSerializer, GalleryImageSerializer
 
 
 class ImageSerializer(serializers.ModelSerializer):
-    #max 50 images
+
     class Meta:
         model = Image
         fields = (
-            # 'account_id',
             'images',
         )
 
@@ -29,7 +25,6 @@ class CatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = (
-
             'name_category',
         )
 
@@ -39,16 +34,17 @@ class AmenitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Amenity
         fields = (
-
             'name',
         )
 
 
 class AccountDetailSerializers(serializers.ModelSerializer):
+    """
+    organization only detail serializer
+    """
     gallery_img = serializers.SerializerMethodField(read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
     url = serializers.SerializerMethodField(read_only=True)
-    # account_category = serializers.CharField(source='account_category.name_category')
     user = serializers.SerializerMethodField(read_only=True)
     review_office = CreateReviewOffice(many=True, read_only=True)
     review_school = CreateReviewSchool(many=True, read_only=True)
@@ -92,7 +88,6 @@ class AccountDetailSerializers(serializers.ModelSerializer):
         gallery_count = PostImg.objects.filter(gallery=gallery_qs.first()).count()
 
         imgs = []
-
         for i in range(gallery_count):
             imgs.append(GalleryImageSerializer(gallery_qs, many=True).data[0]['img'][i]['image'])
         return imgs
@@ -141,15 +136,36 @@ class AccountSerializers(serializers.ModelSerializer):
         read_only_fields = ['owner', 'amenities']
 
     def create(self, validated_data):
+        """
+        add gallery image and video
+        """
         images = self.context['request'].FILES
+        amenity = self.context['request'].data
+
         m1 = Account.objects.create(
             **validated_data
         )
+        if amenity.getlist("amenity"):
+            for i in amenity.getlist("amenity"):
+                m1.amenities.add(i)
+
+        gallery_of_account = GalleryImg.objects.create(
+            post=m1
+        )
+        gallery_vid_of_account = GalleryVideo.objects.create(
+            post=m1
+        )
         account_image_model_instance = [
-            Image(account_id=m1, images=image) for image in images.getlist('images')
+            PostImg(gallery=gallery_of_account, image=image) for image in images.getlist('images')
         ]
-        Image.objects.bulk_create(
+        account_video_model_instance = [
+            PostVideo(gallery=gallery_vid_of_account, video=video) for video in images.getlist('videos')
+        ]
+        PostImg.objects.bulk_create(
             account_image_model_instance
+        )
+        PostVideo.objects.bulk_create(
+            account_video_model_instance
         )
         return m1
 
@@ -165,7 +181,6 @@ class AccountSerializers(serializers.ModelSerializer):
             response['amenities'].append(AmenitySerializer(instance.amenities.all(), many=True).data[i]['name'])
         response['account_category'] = CatSerializer(instance.account_category).data['name_category']
         return response
-
 
     def get_gallery_img(self, obj):
         gallery_qs = GalleryImg.objects.filter(post=obj).all()
