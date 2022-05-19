@@ -19,6 +19,7 @@ from accounts.serializers import (
     ImageSerializer,
     CategoryListSerializerTest, CategoryListSerializer,
 )
+from gallery.models import GalleryImg, GalleryVideo, PostImg, PostVideo
 
 
 class OrganizationListAPIView(CreateModelMixin, ListAPIView):
@@ -35,6 +36,7 @@ class OrganizationListAPIView(CreateModelMixin, ListAPIView):
     def perform_create(self, serializer):
         org = serializer.save()
         user = self.request.user
+        media = self.request.FILES
         org_user = OrganizationUser.objects.create(
             user=user,
             organization=org
@@ -43,6 +45,27 @@ class OrganizationListAPIView(CreateModelMixin, ListAPIView):
             organization_user=org_user,
             organization=org
         )
+
+        gallery_of_account = GalleryImg.objects.create(
+            post=org
+        )
+        gallery_vid_of_account = GalleryVideo.objects.create(
+            post=org
+        )
+
+        account_image_model_instance = [
+            PostImg(gallery=gallery_of_account, image=image) for image in media.getlist('images')
+        ]
+        account_video_model_instance = [
+            PostVideo(gallery=gallery_vid_of_account, video=video) for video in media.getlist('videos')
+        ]
+        PostImg.objects.bulk_create(
+            account_image_model_instance
+        )
+        PostVideo.objects.bulk_create(
+            account_video_model_instance
+        )
+
         serializer.save(organization_user=org_user, organization_owner=org_owner)
 
 

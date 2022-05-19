@@ -139,7 +139,7 @@ class AccountSerializers(serializers.ModelSerializer):
         """
         add gallery image and video
         """
-        images = self.context['request'].FILES
+        # images = self.context['request'].FILES
         amenity = self.context['request'].data
 
         m1 = Account.objects.create(
@@ -147,26 +147,27 @@ class AccountSerializers(serializers.ModelSerializer):
         )
         if amenity.getlist("amenity"):
             for i in amenity.getlist("amenity"):
+
                 m1.amenities.add(i)
 
-        gallery_of_account = GalleryImg.objects.create(
-            post=m1
-        )
-        gallery_vid_of_account = GalleryVideo.objects.create(
-            post=m1
-        )
-        account_image_model_instance = [
-            PostImg(gallery=gallery_of_account, image=image) for image in images.getlist('images')
-        ]
-        account_video_model_instance = [
-            PostVideo(gallery=gallery_vid_of_account, video=video) for video in images.getlist('videos')
-        ]
-        PostImg.objects.bulk_create(
-            account_image_model_instance
-        )
-        PostVideo.objects.bulk_create(
-            account_video_model_instance
-        )
+        # gallery_of_account = GalleryImg.objects.create(
+        #     post=m1
+        # )
+        # gallery_vid_of_account = GalleryVideo.objects.create(
+        #     post=m1
+        # )
+        # account_image_model_instance = [
+        #     PostImg(gallery=gallery_of_account, image=image) for image in images.getlist('images')
+        # ]
+        # account_video_model_instance = [
+        #     PostVideo(gallery=gallery_vid_of_account, video=video) for video in images.getlist('videos')
+        # ]
+        # PostImg.objects.bulk_create(
+        #     account_image_model_instance
+        # )
+        # PostVideo.objects.bulk_create(
+        #     account_video_model_instance
+        # )
         return m1
 
     def get_url(self, obj):

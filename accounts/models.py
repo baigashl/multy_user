@@ -46,6 +46,9 @@ class Amenity(AbstractItem):
 
 
 class Category(models.Model):
+
+    """ Category Model """
+
     name_category = models.CharField(max_length=255)
     update = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -58,6 +61,9 @@ class Category(models.Model):
 
 
 class Account(Organization):
+
+    """ Account Item """
+
     account_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='cat')
     description = models.TextField()
     deleted = models.BooleanField(default=False)
