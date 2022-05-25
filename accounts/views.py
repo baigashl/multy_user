@@ -168,15 +168,6 @@ class AddRemoveWishListItemsView(UpdateAPIView):
             return Response({"message": "failed", "details": serializer.errors})
 
 
-class WishListAPIView(ListAPIView):
-    permission_classes = []
-
-    # def get(self, request, format=None):
-    #     return Response(
-    #         data=get_suggestions(),
-    #         status=status.HTTP_200_OK
-    #     )
-
 
 
 

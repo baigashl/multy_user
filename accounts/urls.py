@@ -15,8 +15,3 @@ urlpatterns = [
     # WishList add / remove item
     path('addwishlist/<int:id>/', AddRemoveWishListItemsView.as_view(), name='add-remove-wishlist'),
 ]
-
-"""
-Api for organisation 
-
-"""

@@ -55,10 +55,12 @@ class UserDetailAPIView(UpdateModelMixin, DestroyModelMixin, RetrieveAPIView):
 
 
 class UserWishListAPIView(RetrieveAPIView):
+    """
+    wish list view
+    """
     queryset = CustomUser.objects.filter(is_active=True)
     serializer_class = UserWishListSerializer
     permission_classes = []
-
 
 
 class UserListAPIView(ListAPIView):

@@ -69,7 +69,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
         return reverse("user-detail", kwargs={"pk": obj.id}, request=request)
 
     def get_user_organizations(self, obj):
-        qs = Organization.objects.filter(
+        qs = Account.objects.filter(
             users=obj.id
         )
         return AccountInlineSerializers(qs, many=True).data

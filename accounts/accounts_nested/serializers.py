@@ -30,7 +30,7 @@ class AccountInlineSerializers(serializers.ModelSerializer):
             'url',
             'id',
             'name',
-            'account_category',
+            # 'account_category',
             'review_office',
             'review_school',
             'review_cat_kindergarten',
