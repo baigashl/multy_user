@@ -5,6 +5,7 @@ from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 
 from accounts.accounts_nested.serializers import AccountInlineSerializers
+from accounts.models import Account
 from users.models import CustomUser
 
 
@@ -70,6 +71,32 @@ class UserDetailSerializer(serializers.ModelSerializer):
     def get_user_organizations(self, obj):
         qs = Organization.objects.filter(
             users=obj.id
+        )
+        return AccountInlineSerializers(qs, many=True).data
+
+
+class UserWishListSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField(read_only=True)
+    wishlist = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            'id',
+            'url',
+            'email',
+            'full_name',
+            'wishlist'
+        ]
+        read_only_fields = ['user_organizations']
+
+    def get_url(self, obj):
+        request = self.context.get('request')
+        return reverse("user-detail", kwargs={"pk": obj.id}, request=request)
+
+    def get_wishlist(self, obj):
+        qs = Account.objects.filter(
+            users_wishlist=obj
         )
         return AccountInlineSerializers(qs, many=True).data
 

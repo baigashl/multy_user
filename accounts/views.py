@@ -1,6 +1,6 @@
-from rest_framework import mixins
+from rest_framework import mixins, status
 from rest_framework.generics import (
-    RetrieveAPIView, ListAPIView, CreateAPIView
+    RetrieveAPIView, ListAPIView, CreateAPIView, UpdateAPIView
 )
 from rest_framework.mixins import (
     UpdateModelMixin,
@@ -10,6 +10,8 @@ from organizations.models import (
     Organization, OrganizationOwner, OrganizationUser
 )
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from accounts.models import Category, Account
 from accounts.serializers import (
@@ -17,12 +19,15 @@ from accounts.serializers import (
     AccountSerializers,
     OrganizationCreateSerializer,
     ImageSerializer,
-    CategoryListSerializerTest, CategoryListSerializer,
+    CategoryListSerializerTest, CategoryListSerializer, WishListSerializers,
 )
 from gallery.models import GalleryImg, GalleryVideo, PostImg, PostVideo
 
 
 class OrganizationListAPIView(CreateModelMixin, ListAPIView):
+    """
+    Organization list/create view
+    """
     # permission_classes = []
     # authentication_classes = [SessionAuthentication]
     serializer_class = AccountSerializers
@@ -37,6 +42,8 @@ class OrganizationListAPIView(CreateModelMixin, ListAPIView):
         org = serializer.save()
         user = self.request.user
         media = self.request.FILES
+        print(self.request.data)
+        print(media.getlist('images'))
         org_user = OrganizationUser.objects.create(
             user=user,
             organization=org
@@ -70,6 +77,9 @@ class OrganizationListAPIView(CreateModelMixin, ListAPIView):
 
 
 class OrganizationCreateAPIView(CreateAPIView):
+    """
+    Organization create view
+    """
     permission_classes = []
     authentication_classes = []
     queryset = Organization.objects.all()
@@ -77,6 +87,9 @@ class OrganizationCreateAPIView(CreateAPIView):
 
 
 class AccountDetailAPIView(UpdateModelMixin, DestroyModelMixin, RetrieveAPIView):
+    """
+    Organization detail/update/delete view
+    """
     permission_classes = []
     authentication_classes = [SessionAuthentication]
     queryset = Account.objects.all()
@@ -127,5 +140,48 @@ class DetailCategory(
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+class AddRemoveWishListItemsView(UpdateAPIView):
+    permission_classes = []
+    authentication_classes = [SessionAuthentication]
+    queryset = Account.objects.all()
+    serializer_class = WishListSerializers
+    lookup_field = 'id'
+
+    def update(self, request, *args, **kwargs):
+        user = self.request.user
+        instance = self.get_object()
+
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            # print(instance.users_wishlist.filter(id=user.id).exists())
+            account = serializer.save()
+            if account.users_wishlist.filter(id=user.id).exists():
+                account.users_wishlist.remove(user)
+            else:
+                account.users_wishlist.add(user)
+            # print(instance.users_wishlist.filter(id=user.id).exists())
+            return Response({"message": "wishlist updated successfully"})
+
+        else:
+            return Response({"message": "failed", "details": serializer.errors})
+
+
+class WishListAPIView(ListAPIView):
+    permission_classes = []
+
+    # def get(self, request, format=None):
+    #     return Response(
+    #         data=get_suggestions(),
+    #         status=status.HTTP_200_OK
+    #     )
+
+
+
+
+
+
+
 
 

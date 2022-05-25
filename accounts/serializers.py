@@ -38,6 +38,14 @@ class AmenitySerializer(serializers.ModelSerializer):
         )
 
 
+class WishListSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = [
+            'users_wishlist',
+        ]
+
+
 class AccountDetailSerializers(serializers.ModelSerializer):
     """
     organization only detail serializer
@@ -65,12 +73,14 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             'gallery_img',
             'gallery_video',
             'amenities',
+            'users_wishlist'
         ]
         read_only_fields = [
             'id',
             'user',
             'owner',
             'url',
+            'users_wishlist'
         ]
 
     def get_url(self, obj):

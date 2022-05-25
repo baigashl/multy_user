@@ -3,7 +3,7 @@ from accounts.views import (
     AccountDetailAPIView,
     OrganizationListAPIView,
     OrganizationCreateAPIView,
-    DetailCategory, ListCategory,
+    DetailCategory, ListCategory, AddRemoveWishListItemsView,
 )
 urlpatterns = [
     path('', OrganizationListAPIView.as_view(), name='list-organization'),
@@ -11,6 +11,9 @@ urlpatterns = [
     path('<int:id>/', AccountDetailAPIView.as_view(), name='detail-organization'),
     path('category/', ListCategory.as_view(), name='category'),
     path('category/<int:pk>/', DetailCategory.as_view(), name='detail_category'),
+
+    # WishList add / remove item
+    path('addwishlist/<int:id>/', AddRemoveWishListItemsView.as_view(), name='add-remove-wishlist'),
 ]
 
 """

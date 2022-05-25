@@ -72,6 +72,7 @@ class Account(Organization):
     lng = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True)
 
     amenities = models.ManyToManyField(Amenity, related_name="accounts", blank=True)
+    users_wishlist = models.ManyToManyField(CustomUser, related_name="user_wishlist", blank=True)
 
 
 class Image(models.Model):

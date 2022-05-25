@@ -11,7 +11,7 @@ from .models import CustomUser
 from .serializers import (
     RegisterSerializer,
     UserDetailSerializer,
-    UserAccountSerializer, RegisterOrgUserSerializers, OrgUserDetailSerializer
+    UserAccountSerializer, RegisterOrgUserSerializers, OrgUserDetailSerializer, UserWishListSerializer
 )
 from rest_framework import generics, status
 from .permissions import AnonPermissionOnly
@@ -52,6 +52,13 @@ class UserDetailAPIView(UpdateModelMixin, DestroyModelMixin, RetrieveAPIView):
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+class UserWishListAPIView(RetrieveAPIView):
+    queryset = CustomUser.objects.filter(is_active=True)
+    serializer_class = UserWishListSerializer
+    permission_classes = []
+
 
 
 class UserListAPIView(ListAPIView):
