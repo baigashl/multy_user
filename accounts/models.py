@@ -26,6 +26,7 @@ class AbstractItem(models.Model):
     """ Abstract Item """
 
     name = models.CharField(max_length=80)
+    slug = models.SlugField(null=False, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     objects = managers.CustomModelManager()

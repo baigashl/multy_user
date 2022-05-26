@@ -50,6 +50,9 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
+    """
+    Serializer for user detail
+    """
     url = serializers.SerializerMethodField(read_only=True)
     user_organizations = serializers.SerializerMethodField(read_only=True)
 

@@ -155,10 +155,11 @@ class AccountSerializers(serializers.ModelSerializer):
         m1 = Account.objects.create(
             **validated_data
         )
+        print(amenity.getlist("amenity"))
         if amenity.getlist("amenity"):
             for i in amenity.getlist("amenity"):
-
-                m1.amenities.add(i)
+                amenityt_id = Amenity.objects.filter(slug=i).first()
+                m1.amenities.add(amenityt_id.id)
 
         # gallery_of_account = GalleryImg.objects.create(
         #     post=m1
