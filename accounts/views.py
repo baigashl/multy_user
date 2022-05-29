@@ -144,7 +144,6 @@ class DetailCategory(
 
 class AddRemoveWishListItemsView(UpdateAPIView):
     permission_classes = []
-    authentication_classes = [SessionAuthentication]
     queryset = Account.objects.all()
     serializer_class = WishListSerializers
     lookup_field = 'id'
