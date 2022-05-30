@@ -35,6 +35,7 @@ class AmenitySerializer(serializers.ModelSerializer):
         model = Amenity
         fields = (
             'name',
+            'slug'
         )
 
 
@@ -117,7 +118,12 @@ class AccountDetailSerializers(serializers.ModelSerializer):
         amenity = response.pop("amenities")
         response['amenities'] = []
         for i in range(len(amenity)):
-            response['amenities'].append(AmenitySerializer(instance.amenities.all(), many=True).data[i]['name'])
+            response['amenities'].append(
+                {
+                    'name': AmenitySerializer(instance.amenities.all(), many=True).data[i]['name'],
+                    'icon': AmenitySerializer(instance.amenities.all(), many=True).data[i]['slug']
+                }
+            )
         response['account_category'] = CatSerializer(instance.account_category).data['name_category']
         return response
 
