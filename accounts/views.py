@@ -1,4 +1,4 @@
-from rest_framework import mixins, status
+from rest_framework import mixins, status, permissions
 from rest_framework.generics import (
     RetrieveAPIView, ListAPIView, CreateAPIView, UpdateAPIView
 )
@@ -28,7 +28,7 @@ class OrganizationListAPIView(CreateModelMixin, ListAPIView):
     """
     Organization list/create view
     """
-    # permission_classes = []
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # authentication_classes = [SessionAuthentication]
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
@@ -90,7 +90,7 @@ class AccountDetailAPIView(UpdateModelMixin, DestroyModelMixin, RetrieveAPIView)
     """
     Organization detail/update/delete view
     """
-    # permission_classes = []
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # authentication_classes = [SessionAuthentication]
     queryset = Account.objects.all()
     serializer_class = AccountDetailSerializers
