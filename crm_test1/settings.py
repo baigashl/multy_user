@@ -140,8 +140,8 @@ USE_TZ = True
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'dinstamaly@gmail.com'
-EMAIL_HOST_PASSWORD = 'Iamaddictedtobanana1!'
+EMAIL_HOST_USER = 'studilimedu@gmail.com'
+EMAIL_HOST_PASSWORD = 'Iamaddictedto1!'
 
 
 # Static files (CSS, JavaScript, Images)
