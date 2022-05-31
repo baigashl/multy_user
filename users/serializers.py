@@ -201,11 +201,3 @@ class OrgUserSerializer(serializers.ModelSerializer):
             'organization'
         ]
         read_only_fields = ['user']
-
-
-
-
-
-
-
-

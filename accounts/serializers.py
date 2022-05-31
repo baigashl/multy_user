@@ -143,6 +143,7 @@ class AccountSerializers(serializers.ModelSerializer):
             'url',
             'account_category',
             'name',
+            'description',
             'users',
             'owner',
             'amenities',

@@ -21,6 +21,10 @@ class ListOffice(mixins.CreateModelMixin, ListAPIView):
     def post(self, *args, **kwargs):
         return self.create(*args, **kwargs)
 
+    def perform_create(self, serializer):
+        review_user = self.request.user
+        serializer.save(review_user=review_user)
+
 
 class DetailOffice(
     mixins.DestroyModelMixin,
@@ -59,6 +63,10 @@ class ListSchool(mixins.CreateModelMixin, generics.ListAPIView):
     def post(self, *args, **kwargs):
         return self.create(*args, **kwargs)
 
+    def perform_create(self, serializer):
+        review_user = self.request.user
+        serializer.save(review_user=review_user)
+
 
 class DetailSchool(
     mixins.DestroyModelMixin,
@@ -96,6 +104,10 @@ class ListKindergarten(mixins.CreateModelMixin, generics.ListAPIView):
 
     def post(self, *args, **kwargs):
         return self.create(*args, **kwargs)
+
+    def perform_create(self, serializer):
+        review_user = self.request.user
+        serializer.save(review_user=review_user)
 
 
 class DetailKindergarten(

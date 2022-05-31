@@ -4,10 +4,12 @@ from django.db import models
 from django.urls import reverse
 
 from accounts.models import Account
+from users.models import CustomUser
 
 
 class ReviewSchool(models.Model):
     review_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='review_school')
+    review_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='review_school_user')
     review = models.TextField()
     purity = models.IntegerField(
         validators=[MinValueValidator(1),
@@ -86,6 +88,7 @@ class ReviewSchool(models.Model):
 
 class ReviewOffice(models.Model):
     review_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='review_office')
+    review_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='review_office_user')
     review = models.TextField()
     reputation = models.IntegerField(
         validators=[MinValueValidator(1),
@@ -142,6 +145,7 @@ class ReviewOffice(models.Model):
 
 class ReviewKindergarten(models.Model):
     review_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='review_cat_kindergarten')
+    review_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='review_kindergarten_user')
     review = models.TextField()
     purity = models.IntegerField(
         validators=[MinValueValidator(1),
