@@ -120,18 +120,18 @@ class AccountDetailSerializers(serializers.ModelSerializer):
 
     def get_rating(self, obj):
         rating = []
-        if obj.account_category.id == 3:
-            rating = ReviewSchool.objects.filter(review_account=obj.id)
         if obj.account_category.id == 1:
-            rating = ReviewKindergarten.objects.filter(review_account=obj.id)
+            rating = ReviewSchool.objects.filter(review_account=obj.id)
         if obj.account_category.id == 2:
+            rating = ReviewKindergarten.objects.filter(review_account=obj.id)
+        if obj.account_category.id == 3:
             rating = ReviewOffice.objects.filter(review_account=obj.id)
         total_rating = 0
 
         if rating:
             for rate in rating:
                 total_rating += rate.rating_average()
-            total_rating = format(total_rating/rating.count(), ".2f")
+            total_rating = format(total_rating/rating.count(), ".1f")
 
         return total_rating
 
@@ -199,11 +199,11 @@ class AccountSerializers(serializers.ModelSerializer):
 
     def get_rating(self, obj):
         rating = []
-        if obj.account_category.id == 3:
-            rating = ReviewSchool.objects.filter(review_account=obj.id)
         if obj.account_category.id == 1:
-            rating = ReviewKindergarten.objects.filter(review_account=obj.id)
+            rating = ReviewSchool.objects.filter(review_account=obj.id)
         if obj.account_category.id == 2:
+            rating = ReviewKindergarten.objects.filter(review_account=obj.id)
+        if obj.account_category.id == 3:
             rating = ReviewOffice.objects.filter(review_account=obj.id)
         total_rating = 0
 
