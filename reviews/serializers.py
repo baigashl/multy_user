@@ -15,6 +15,7 @@ class CreateReviewSchool(serializers.ModelSerializer):
         fields = [
             'id',
             'url',
+            'timestamp',
             'review_user',
             'review_account', 'review',
             'purity', 'nutrition', 'training_program',
@@ -44,6 +45,7 @@ class CreateReviewOffice(serializers.ModelSerializer):
         fields = [
             'id',
             'url',
+            'timestamp',
             'review_user',
             'review_account', 'review',
             'reputation', 'staff', 'support', 'accompany',
@@ -73,6 +75,7 @@ class CreateReviewKindergarten(serializers.ModelSerializer):
         fields = [
             'id',
             'url',
+            'timestamp',
             'review_user',
             'review_account', 'review',
             'purity', 'nutrition', 'activity', 'upbringing',

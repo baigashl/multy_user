@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from organizations.models import (
@@ -6,6 +7,7 @@ from organizations.models import (
 )
 from accounts.models import Image, Account, Category, Amenity
 from gallery.models import PostImg, GalleryImg, GalleryVideo, PostVideo
+from reviews.models import ReviewSchool, ReviewOffice, ReviewKindergarten
 from reviews.serializers import CreateReviewOffice, CreateReviewKindergarten, CreateReviewSchool
 from users.users_nested.serializers import OrganizationUserSerializer
 from gallery.serializers import GalleryVideoSerializer, GalleryImageSerializer
@@ -135,6 +137,7 @@ class AccountSerializers(serializers.ModelSerializer):
     url = serializers.SerializerMethodField(read_only=True)
     gallery_img = serializers.SerializerMethodField(read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
+    # rating = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Account
@@ -143,6 +146,7 @@ class AccountSerializers(serializers.ModelSerializer):
             'url',
             'account_category',
             'name',
+            # 'rating',
             'description',
             'users',
             'owner',
@@ -150,7 +154,7 @@ class AccountSerializers(serializers.ModelSerializer):
             'gallery_img',
             'gallery_video',
         ]
-        read_only_fields = ['owner', 'amenities']
+        read_only_fields = ['owner', 'amenities', 'rating']
 
     def create(self, validated_data):
         """
@@ -168,29 +172,27 @@ class AccountSerializers(serializers.ModelSerializer):
                 amenityt_id = Amenity.objects.filter(slug=i).first()
                 m1.amenities.add(amenityt_id.id)
 
-        # gallery_of_account = GalleryImg.objects.create(
-        #     post=m1
-        # )
-        # gallery_vid_of_account = GalleryVideo.objects.create(
-        #     post=m1
-        # )
-        # account_image_model_instance = [
-        #     PostImg(gallery=gallery_of_account, image=image) for image in images.getlist('images')
-        # ]
-        # account_video_model_instance = [
-        #     PostVideo(gallery=gallery_vid_of_account, video=video) for video in images.getlist('videos')
-        # ]
-        # PostImg.objects.bulk_create(
-        #     account_image_model_instance
-        # )
-        # PostVideo.objects.bulk_create(
-        #     account_video_model_instance
-        # )
         return m1
 
     def get_url(self, obj):
         request = self.context.get('request')
         return reverse("detail-organization", kwargs={"id": obj.id}, request=request)
+
+    # def get_rating(self, obj):
+    #     rating = []
+    #     print(obj.account_category.id)
+    #     if obj.account_category == 'school':
+    #         rating = ReviewSchool.objects.filter(review_account=obj.id)
+    #     if obj.account_category.id == 1:
+    #         rating = ReviewKindergarten.objects.filter(review_account=obj.id)
+    #         print('hello')
+    #     if obj.account_category == 'office':
+    #         rating = ReviewOffice.objects.filter(review_account=obj.id)
+    #     print(rating.rating_average())
+    #
+    #     # total_rating = rating.filter(rat)
+    #
+    #     return []
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
