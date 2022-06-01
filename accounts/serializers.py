@@ -131,7 +131,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
         if rating:
             for rate in rating:
                 total_rating += rate.rating_average()
-            total_rating = total_rating/rating.count()
+            total_rating = format(total_rating/rating.count(), ".2f")
 
         return total_rating
 
@@ -210,7 +210,7 @@ class AccountSerializers(serializers.ModelSerializer):
         if rating:
             for rate in rating:
                 total_rating += rate.rating_average()
-            total_rating = total_rating/rating.count()
+            total_rating = format(total_rating/rating.count(), ".1f")
 
         return total_rating
 
