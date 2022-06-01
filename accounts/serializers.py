@@ -60,6 +60,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
     review_office = CreateReviewOffice(many=True, read_only=True)
     review_school = CreateReviewSchool(many=True, read_only=True)
     review_cat_kindergarten = CreateReviewKindergarten(many=True, read_only=True)
+    rating = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Account
@@ -67,6 +68,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             'url',
             'id',
             'name',
+            'rating',
             'account_category',
             'user',
             'owner',
@@ -115,6 +117,24 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             vids.append(GalleryVideoSerializer(gallery_qs, many=True).data[0]['video'][i]['video'])
         return vids
 
+
+    def get_rating(self, obj):
+        rating = []
+        if obj.account_category.id == 3:
+            rating = ReviewSchool.objects.filter(review_account=obj.id)
+        if obj.account_category.id == 1:
+            rating = ReviewKindergarten.objects.filter(review_account=obj.id)
+        if obj.account_category.id == 2:
+            rating = ReviewOffice.objects.filter(review_account=obj.id)
+        total_rating = 0
+
+        if rating:
+            for rate in rating:
+                total_rating += rate.rating_average()
+            total_rating = total_rating/rating.count()
+
+        return total_rating
+
     def to_representation(self, instance):
         response = super().to_representation(instance)
         amenity = response.pop("amenities")
@@ -137,7 +157,7 @@ class AccountSerializers(serializers.ModelSerializer):
     url = serializers.SerializerMethodField(read_only=True)
     gallery_img = serializers.SerializerMethodField(read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
-    # rating = serializers.SerializerMethodField(read_only=True)
+    rating = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Account
@@ -146,7 +166,7 @@ class AccountSerializers(serializers.ModelSerializer):
             'url',
             'account_category',
             'name',
-            # 'rating',
+            'rating',
             'description',
             'users',
             'owner',
@@ -166,7 +186,6 @@ class AccountSerializers(serializers.ModelSerializer):
         m1 = Account.objects.create(
             **validated_data
         )
-        print(amenity.getlist("amenity"))
         if amenity.getlist("amenity"):
             for i in amenity.getlist("amenity"):
                 amenityt_id = Amenity.objects.filter(slug=i).first()
@@ -178,21 +197,22 @@ class AccountSerializers(serializers.ModelSerializer):
         request = self.context.get('request')
         return reverse("detail-organization", kwargs={"id": obj.id}, request=request)
 
-    # def get_rating(self, obj):
-    #     rating = []
-    #     print(obj.account_category.id)
-    #     if obj.account_category == 'school':
-    #         rating = ReviewSchool.objects.filter(review_account=obj.id)
-    #     if obj.account_category.id == 1:
-    #         rating = ReviewKindergarten.objects.filter(review_account=obj.id)
-    #         print('hello')
-    #     if obj.account_category == 'office':
-    #         rating = ReviewOffice.objects.filter(review_account=obj.id)
-    #     print(rating.rating_average())
-    #
-    #     # total_rating = rating.filter(rat)
-    #
-    #     return []
+    def get_rating(self, obj):
+        rating = []
+        if obj.account_category.id == 3:
+            rating = ReviewSchool.objects.filter(review_account=obj.id)
+        if obj.account_category.id == 1:
+            rating = ReviewKindergarten.objects.filter(review_account=obj.id)
+        if obj.account_category.id == 2:
+            rating = ReviewOffice.objects.filter(review_account=obj.id)
+        total_rating = 0
+
+        if rating:
+            for rate in rating:
+                total_rating += rate.rating_average()
+            total_rating = total_rating/rating.count()
+
+        return total_rating
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
