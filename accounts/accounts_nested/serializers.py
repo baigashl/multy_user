@@ -19,10 +19,6 @@ class AccountInlineSerializers(serializers.ModelSerializer):
     gallery_img = serializers.SerializerMethodField(read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
     url = serializers.SerializerMethodField(read_only=True)
-    # user = serializers.SerializerMethodField(read_only=True)
-    review_office = CreateReviewOffice(many=True, read_only=True)
-    review_school = CreateReviewSchool(many=True, read_only=True)
-    review_cat_kindergarten = CreateReviewKindergarten(many=True, read_only=True)
 
     class Meta:
         model = Account
@@ -30,20 +26,10 @@ class AccountInlineSerializers(serializers.ModelSerializer):
             'url',
             'id',
             'name',
-            # 'account_category',
-            'review_office',
-            'review_school',
-            'review_cat_kindergarten',
+            'account_category',
             'gallery_img',
             'gallery_video',
             'amenities',
-        ]
-        read_only_fields = [
-            'id',
-            'user',
-            'owner',
-            'url',
-            'users_wishlist'
         ]
 
     def get_url(self, obj):
