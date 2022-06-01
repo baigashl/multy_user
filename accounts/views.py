@@ -13,7 +13,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.models import Category, Account
+from accounts.models import Category, Account, Price
 from accounts.serializers import (
     AccountDetailSerializers,
     AccountSerializers,
@@ -42,8 +42,16 @@ class OrganizationListAPIView(CreateModelMixin, ListAPIView):
         org = serializer.save()
         user = self.request.user
         media = self.request.FILES
-        print(self.request.data)
+        data = self.request.data
         print(media.getlist('images'))
+        print(self.request.data['price'])
+        price = Price.objects.create(
+            account=org,
+            price=float(data['price']) if data['price'] else 0,
+            extra_price=float(data['extra_price']) if data['extra_price'] else 0,
+            moth_price=float(data['month_price']) if data['month_price'] else 0,
+            month_extra_price=float(data['month_extra_price']) if data['month_extra_price'] else 0,
+        )
         org_user = OrganizationUser.objects.create(
             user=user,
             organization=org

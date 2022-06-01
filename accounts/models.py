@@ -84,6 +84,17 @@ class Image(models.Model):
     images = models.ImageField(upload_to=upload_path, null=True, blank=True)
 
 
+class Price(models.Model):
+
+    """ Price Model """
+
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    extra_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    moth_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    month_extra_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+
+
 # class AccountUser(OrganizationUser):
 #     account = models.ForeignKey(
 #         Account,

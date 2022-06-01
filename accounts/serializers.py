@@ -5,7 +5,7 @@ from organizations.models import (
     OrganizationUser,
     Organization,
 )
-from accounts.models import Image, Account, Category, Amenity
+from accounts.models import Image, Account, Category, Amenity, Price
 from gallery.models import PostImg, GalleryImg, GalleryVideo, PostVideo
 from reviews.models import ReviewSchool, ReviewOffice, ReviewKindergarten
 from reviews.serializers import CreateReviewOffice, CreateReviewKindergarten, CreateReviewSchool
@@ -41,6 +41,13 @@ class AmenitySerializer(serializers.ModelSerializer):
         )
 
 
+class PriceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Price
+        fields = '__all__'
+
+
 class WishListSerializers(serializers.ModelSerializer):
     class Meta:
         model = Account
@@ -61,6 +68,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
     review_school = CreateReviewSchool(many=True, read_only=True)
     review_cat_kindergarten = CreateReviewKindergarten(many=True, read_only=True)
     rating = serializers.SerializerMethodField(read_only=True)
+    price = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Account
@@ -68,6 +76,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             'url',
             'id',
             'name',
+            'price',
             'rating',
             'account_category',
             'user',
@@ -91,6 +100,10 @@ class AccountDetailSerializers(serializers.ModelSerializer):
     def get_url(self, obj):
         request = self.context.get('request')
         return reverse("detail-organization", kwargs={"id": obj.id}, request=request)
+
+    def get_price(self, obj):
+        price = Price.objects.filter(account=obj).first()
+        return PriceSerializer(price).data
 
     def get_user(self, obj):
         qs = OrganizationUser.objects.filter(
@@ -158,6 +171,7 @@ class AccountSerializers(serializers.ModelSerializer):
     gallery_img = serializers.SerializerMethodField(read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
     rating = serializers.SerializerMethodField(read_only=True)
+    price = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Account
@@ -166,6 +180,7 @@ class AccountSerializers(serializers.ModelSerializer):
             'url',
             'account_category',
             'name',
+            'price',
             'rating',
             'description',
             'users',
@@ -196,6 +211,12 @@ class AccountSerializers(serializers.ModelSerializer):
     def get_url(self, obj):
         request = self.context.get('request')
         return reverse("detail-organization", kwargs={"id": obj.id}, request=request)
+
+
+    def get_price(self, obj):
+        price = Price.objects.filter(account=obj).first()
+        return PriceSerializer(price).data
+
 
     def get_rating(self, obj):
         rating = []
