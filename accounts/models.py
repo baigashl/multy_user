@@ -69,6 +69,7 @@ class Account(Organization):
     description = models.TextField()
     deleted = models.BooleanField(default=False)
     featured = models.BooleanField(default=False)
+    address = models.CharField(max_length=250)
     lat = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True)
     lng = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True)
 
