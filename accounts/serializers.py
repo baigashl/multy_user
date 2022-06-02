@@ -76,6 +76,10 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             'url',
             'id',
             'name',
+            'address',
+            'description',
+            'lat',
+            'lng',
             'price',
             'rating',
             'account_category',
@@ -110,36 +114,52 @@ class AccountDetailSerializers(serializers.ModelSerializer):
         amenity_ids = []
         for amenity in amenities:
             amenity_instance, created = Amenity.objects.update_or_create(
-                name=amenity, slug=amenity, defaults=amenity)
-            print(amenity_instance, created)
+                pk=amenity.id)
             amenity_ids.append(amenity_instance.pk)
         return amenity_ids
 
-    # def update(self, instance, validated_data):
-    #     """
-    #     add gallery image and video
-    #     """
-    #     # images = self.context['request'].FILES
-    #     print(self.context['request'].data)
-    #     amenity = validated_data.pop('amenities')
-    #     print(amenity)
-    #     instance.amenities.set(self.create_or_update_amenity(amenity))
-    #     fields = [
-    #         'name',
-    #         'account_category',
-    #         'address',
-    #         'description',
-    #         'lat',
-    #         'lng',
-    #
-    #     ]
-    #     for field in fields:
-    #         try:
-    #             setattr(instance, field, validated_data[field])
-    #         except KeyError:  # validated_data may not contain all fields during HTTP PATCH
-    #             pass
-    #     instance.save()
-    #     return instance
+    def update(self, instance, validated_data):
+        """
+
+        """
+        amenity = []
+        data = self.context['request'].data
+        media = self.context['request'].FILES
+        if data.getlist("amenity"):
+            for i in data.getlist("amenity"):
+                amenity_id = Amenity.objects.filter(slug=i).first()
+                amenity.append(amenity_id)
+        instance.amenities.set(self.create_or_update_amenity(amenity))
+
+        if media.getlist('images'):
+            gallery_of_account = GalleryImg.objects.filter(
+                post=instance
+            ).first()
+            # print(gallery_of_account)
+            account_image_model_instance = [
+                PostImg(gallery=gallery_of_account, image=image) for image in
+                media.getlist('images')
+            ]
+            PostImg.objects.bulk_create(
+                account_image_model_instance
+            )
+
+        fields = [
+            'name',
+            'account_category',
+            'address',
+            'description',
+            'lat',
+            'lng',
+
+        ]
+        for field in fields:
+            try:
+                setattr(instance, field, validated_data[field])
+            except KeyError:  # validated_data may not contain all fields during HTTP PATCH
+                pass
+        instance.save()
+        return instance
 
     def get_url(self, obj):
         request = self.context.get('request')
