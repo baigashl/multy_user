@@ -87,6 +87,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
 
 class UserWishListSerializer(serializers.ModelSerializer):
+    # current_user = serializers.SerializerMethodField()
     url = serializers.SerializerMethodField(read_only=True)
     wishlist = serializers.SerializerMethodField(read_only=True)
 
@@ -106,10 +107,16 @@ class UserWishListSerializer(serializers.ModelSerializer):
         return reverse("user-detail", kwargs={"pk": obj.id}, request=request)
 
     def get_wishlist(self, obj):
+        serializer_context = {
+            'current_user': self.context.get('request').user
+        }
         qs = Account.objects.filter(
             users_wishlist=obj
         )
-        return AccountInlineSerializers(qs, many=True).data
+        serializer = AccountInlineSerializers(
+            qs, many=True, read_only=True, context=serializer_context
+        )
+        return serializer.data
 
 
 class UserAccountSerializer(serializers.ModelSerializer):

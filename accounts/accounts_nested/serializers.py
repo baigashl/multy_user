@@ -14,8 +14,9 @@ from users.users_nested.serializers import OrganizationUserSerializer
 
 class AccountInlineSerializers(serializers.ModelSerializer):
     """
-        organization only detail serializer
-        """
+    organization only detail serializer
+    """
+    # current_user = serializers.SerializerMethodField()
     gallery_img = serializers.SerializerMethodField(read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
     url = serializers.SerializerMethodField(read_only=True)
@@ -62,10 +63,18 @@ class AccountInlineSerializers(serializers.ModelSerializer):
         return vids
 
     def to_representation(self, instance):
+
+        user = self.context.get('current_user')
+
         response = super().to_representation(instance)
         amenity = response.pop("amenities")
         response['amenities'] = []
         for i in range(len(amenity)):
             response['amenities'].append(AmenitySerializer(instance.amenities.all(), many=True).data[i]['name'])
         response['account_category'] = CatSerializer(instance.account_category).data['name_category']
+        wished = False
+
+        if instance.users_wishlist.filter(id=user.id).exists():
+            wished = True
+        response['wished'] = wished
         return response
