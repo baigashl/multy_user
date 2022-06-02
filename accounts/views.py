@@ -43,8 +43,6 @@ class OrganizationListAPIView(CreateModelMixin, ListAPIView):
         user = self.request.user
         media = self.request.FILES
         data = self.request.data
-        print(media.getlist('images'))
-        print(self.request.data['price'])
         price = Price.objects.create(
             account=org,
             price=float(data['price']) if data['price'] else 0,

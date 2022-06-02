@@ -97,6 +97,50 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             'users_wishlist'
         ]
 
+    # def get_or_create_amenity(self, amenities):
+    #     amenity_ids = []
+    #     for amenity in amenities:
+    #         amenity_instance, created = Amenity.objects.get_or_create(
+    #             pk=amenity.get('id'), defaults=amenity
+    #         )
+    #         amenity_ids.append(amenity_instance.pk)
+    #     return amenity_ids
+
+    def create_or_update_amenity(self, amenities):
+        amenity_ids = []
+        for amenity in amenities:
+            amenity_instance, created = Amenity.objects.update_or_create(
+                name=amenity, slug=amenity, defaults=amenity)
+            print(amenity_instance, created)
+            amenity_ids.append(amenity_instance.pk)
+        return amenity_ids
+
+    # def update(self, instance, validated_data):
+    #     """
+    #     add gallery image and video
+    #     """
+    #     # images = self.context['request'].FILES
+    #     print(self.context['request'].data)
+    #     amenity = validated_data.pop('amenities')
+    #     print(amenity)
+    #     instance.amenities.set(self.create_or_update_amenity(amenity))
+    #     fields = [
+    #         'name',
+    #         'account_category',
+    #         'address',
+    #         'description',
+    #         'lat',
+    #         'lng',
+    #
+    #     ]
+    #     for field in fields:
+    #         try:
+    #             setattr(instance, field, validated_data[field])
+    #         except KeyError:  # validated_data may not contain all fields during HTTP PATCH
+    #             pass
+    #     instance.save()
+    #     return instance
+
     def get_url(self, obj):
         request = self.context.get('request')
         return reverse("detail-organization", kwargs={"id": obj.id}, request=request)
@@ -236,12 +280,21 @@ class AccountSerializers(serializers.ModelSerializer):
         return total_rating
 
     def to_representation(self, instance):
+        user = None
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            user = request.user
+
         response = super().to_representation(instance)
         amenity = response.pop("amenities")
         response['amenities'] = []
         for i in range(len(amenity)):
             response['amenities'].append(AmenitySerializer(instance.amenities.all(), many=True).data[i]['name'])
         response['account_category'] = CatSerializer(instance.account_category).data['name_category']
+        wished = False
+        if instance.users_wishlist.filter(id=user.id).exists():
+            wished = True
+        response['wished'] = wished
         return response
 
     def get_gallery_img(self, obj):
