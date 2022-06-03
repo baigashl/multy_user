@@ -109,6 +109,12 @@ class AccountDetailSerializers(serializers.ModelSerializer):
     #         )
     #         amenity_ids.append(amenity_instance.pk)
     #     return amenity_ids
+    def clear_existing_images(self, instance):
+        gallery = instance.gallery_img.first()
+        images = PostImg.objects.filter(gallery=gallery).all()
+        for post_image in images:
+            post_image.image.delete()
+            post_image.delete()
 
     def create_or_update_amenity(self, amenities):
         amenity_ids = []
@@ -132,6 +138,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
         instance.amenities.set(self.create_or_update_amenity(amenity))
 
         if media.getlist('images'):
+            self.clear_existing_images(instance)
             gallery_of_account = GalleryImg.objects.filter(
                 post=instance
             ).first()
