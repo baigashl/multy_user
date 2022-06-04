@@ -109,6 +109,13 @@ class AccountDetailSerializers(serializers.ModelSerializer):
     #         )
     #         amenity_ids.append(amenity_instance.pk)
     #     return amenity_ids
+    def clear_existing_videos(self, instance):
+        gallery = instance.gallery_video.first()
+        videos = PostVideo.objects.filter(gallery=gallery).all()
+        for post_video in videos:
+            post_video.video.delete()
+            post_video.delete()
+
     def clear_existing_images(self, instance):
         gallery = instance.gallery_img.first()
         images = PostImg.objects.filter(gallery=gallery).all()
@@ -149,6 +156,20 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             ]
             PostImg.objects.bulk_create(
                 account_image_model_instance
+            )
+
+        if media.getlist('videos'):
+            self.clear_existing_videos(instance)
+            gallery_vid_of_account = GalleryVideo.objects.filter(
+                post=instance
+            ).first()
+            # print(gallery_of_account)
+            account_video_model_instance = [
+                PostVideo(gallery=gallery_vid_of_account, video=video) for
+                video in media.getlist('videos')
+            ]
+            PostVideo.objects.bulk_create(
+                account_video_model_instance
             )
 
         fields = [
