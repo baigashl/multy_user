@@ -131,13 +131,27 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             amenity_ids.append(amenity_instance.pk)
         return amenity_ids
 
+    # def create_or_update_price(self, instance):
+    #     price = instance.price.first()
+    #
+    #     return amenity_ids
+
     def update(self, instance, validated_data):
         """
 
         """
+        price = Price.objects.get(
+            account=instance
+        )
         amenity = []
         data = self.context['request'].data
         media = self.context['request'].FILES
+        print(data['price'])
+        price.price = data['price'] if data['price'] else price.price
+        price.extra_price = data['extra_price'] if data['extra_price'] else price.extra_price
+        price.moth_price = data['month_price'] if data['month_price'] else price.month_price
+        price.month_extra_price = data['month_extra_price'] if data['month_extra_price'] else price.month_extra_price
+        price.save()
         if data.getlist("amenity"):
             for i in data.getlist("amenity"):
                 amenity_id = Amenity.objects.filter(slug=i).first()

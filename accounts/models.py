@@ -91,7 +91,7 @@ class Price(models.Model):
 
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     extra_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    moth_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    month_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     month_extra_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
