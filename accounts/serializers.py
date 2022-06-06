@@ -45,7 +45,13 @@ class PriceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Price
-        fields = '__all__'
+        fields = [
+            'price',
+            'extra_price',
+            'month_price',
+            'month_extra_price'
+        ]
+
 
 
 class WishListSerializers(serializers.ModelSerializer):
