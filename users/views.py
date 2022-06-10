@@ -1,11 +1,12 @@
+from firebase_admin import auth
 from organizations.models import OrganizationUser
 from rest_framework.generics import (
     RetrieveAPIView, ListAPIView, ListCreateAPIView
 )
 from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 from .models import CustomUser
 from .serializers import (
@@ -13,20 +14,18 @@ from .serializers import (
     UserDetailSerializer,
     UserAccountSerializer, RegisterOrgUserSerializers, OrgUserDetailSerializer, UserWishListSerializer
 )
-from rest_framework import generics, status
-from .permissions import AnonPermissionOnly
-from .serializers import MyTokenObtainPairSerializer
+from rest_framework import status
 
 
-class MyObtainTokenPairView(TokenObtainPairView):
-    permission_classes = [AnonPermissionOnly]
-    serializer_class = MyTokenObtainPairSerializer
+class RegisterUser(APIView):
+    permission_classes = [IsAuthenticated]
 
-
-class RegisterView(generics.CreateAPIView):
-    queryset = CustomUser.objects.all()
-    permission_classes = (AllowAny,)
-    serializer_class = RegisterSerializer
+    def post(self, request):
+        user = CustomUser.objects.get(username=request.user.username)
+        firebase_data = auth.get_user(user.username)
+        user.email = firebase_data.email
+        user.save()
+        return Response({'message': 'User Registered'})
 
 
 class OrgUserListApiView(ListCreateAPIView):

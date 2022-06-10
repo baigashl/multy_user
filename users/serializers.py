@@ -1,30 +1,11 @@
 from organizations.models import OrganizationUser, Organization, OrganizationOwner
 from rest_framework.reverse import reverse
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 
 from accounts.accounts_nested.serializers import AccountInlineSerializers
 from accounts.models import Account
 from users.models import CustomUser
-
-
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-
-    @classmethod
-    def get_token(cls, user):
-        token = super(MyTokenObtainPairSerializer, cls).get_token(user)
-
-        token['username'] = user.email
-        return token
-
-    def validate(self, attrs):
-        data = super(MyTokenObtainPairSerializer, self).validate(attrs)
-
-        data['email'] = self.user.email
-        data['id'] = self.user.id
-
-        return data
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -137,6 +118,22 @@ class UserAccountSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True,
+                                     validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'full_name', 'password', 'password2', 'email')
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError(
+                {"password": "Password fields didn't match."})
+
+        return attrs
+
+class UserAccountSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True,
                                      validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)

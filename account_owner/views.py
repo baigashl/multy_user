@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from organizations.models import OrganizationOwner
 from rest_framework.generics import ListAPIView
 from rest_framework.mixins import CreateModelMixin

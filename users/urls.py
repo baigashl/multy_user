@@ -1,14 +1,10 @@
 from django.urls import path
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+# )
 
 from users.views import (
-    MyObtainTokenPairView,
-    RegisterView, UserDetailAPIView,
+    UserDetailAPIView,
     UserListAPIView, OrgUserListApiView,
-    OrgUserDetailAPIView, UserWishListAPIView,
+    OrgUserDetailAPIView, UserWishListAPIView, RegisterUser,
 )
 
 urlpatterns = [
@@ -20,7 +16,7 @@ urlpatterns = [
     # Wishlist display
     path('<int:pk>/wishlist/', UserWishListAPIView.as_view(), name='wishlist'),
 
-    path('token/', MyObtainTokenPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('register/', RegisterView.as_view(), name='auth_register'),
+    # path('token/', MyObtainTokenPairView.as_view(), name='token_obtain_pair'),
+    # path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('register/', RegisterUser.as_view(), name='auth_register'),
 ]

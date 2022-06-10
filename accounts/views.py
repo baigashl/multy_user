@@ -28,7 +28,7 @@ class OrganizationListAPIView(CreateModelMixin, ListAPIView):
     """
     Organization list/create view
     """
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
     # authentication_classes = [SessionAuthentication]
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
