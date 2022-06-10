@@ -6,7 +6,7 @@ REST_FRAMEWORK = {
         #  'rest_framework_simplejwt.authentication.JWTAuthentication',
 
         # Main Firebase auth system
-        'drf_firebase_auth.authentication.FirebaseAuthentication',
+        'users.authentication.FirebaseAuthentication',
     ),
 
     'DEFAULT_PERMISSION_CLASSES': (

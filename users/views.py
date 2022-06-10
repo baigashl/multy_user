@@ -5,7 +5,7 @@ from rest_framework.generics import (
 )
 from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 
 from .models import CustomUser
@@ -21,8 +21,8 @@ class RegisterUser(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        user = CustomUser.objects.get(username=request.user.username)
-        firebase_data = auth.get_user(user.username)
+        user = CustomUser.objects.get(email=request.user.email)
+        firebase_data = auth.get_user(user.email)
         user.email = firebase_data.email
         user.save()
         return Response({'message': 'User Registered'})
