@@ -53,7 +53,6 @@ class PriceSerializer(serializers.ModelSerializer):
         ]
 
 
-
 class WishListSerializers(serializers.ModelSerializer):
     class Meta:
         model = Account
@@ -122,8 +121,9 @@ class AccountDetailSerializers(serializers.ModelSerializer):
         for i in videos:
             if i.video.url in video_list:
                 delete_videos.append(i)
-
+        print(delete_videos)
         for post_video in delete_videos:
+            print(post_video.video.url)
             post_video.video.delete()
             post_video.delete()
 
@@ -189,10 +189,11 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             PostImg.objects.bulk_create(
                 account_image_model_instance
             )
+
         video_list = data['gallery_video']
 
         if video_list:
-            self.clear_existing_images(instance, video_list)
+            self.clear_existing_videos(instance, video_list)
 
         if media.getlist('videos'):
             gallery_vid_of_account = GalleryVideo.objects.filter(
