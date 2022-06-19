@@ -47,7 +47,7 @@ class OrganizationListAPIView(CreateModelMixin, ListAPIView):
             account=org,
             price=float(data['price']) if data['price'] else 0,
             extra_price=float(data['extra_price']) if data['extra_price'] else 0,
-            moth_price=float(data['month_price']) if data['month_price'] else 0,
+            month_price=float(data['month_price']) if data['month_price'] else 0,
             month_extra_price=float(data['month_extra_price']) if data['month_extra_price'] else 0,
         )
         org_user = OrganizationUser.objects.create(
