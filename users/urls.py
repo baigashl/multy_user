@@ -14,7 +14,7 @@ urlpatterns = [
     path('orguser/<int:pk>', OrgUserDetailAPIView.as_view(), name='org_user-detail'),
 
     # Wishlist display
-    path('<int:pk>/wishlist/', UserWishListAPIView.as_view(), name='wishlist'),
+    path('<email>/wishlist/', UserWishListAPIView.as_view(), name='wishlist'),
 
     # path('token/', MyObtainTokenPairView.as_view(), name='token_obtain_pair'),
     # path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
