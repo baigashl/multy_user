@@ -1,7 +1,6 @@
 import os
 
 import firebase_admin
-# from django.contrib.auth import get_user_model
 from firebase_admin import auth, credentials
 from rest_framework.authentication import BaseAuthentication
 from .exceptions import FirebaseAuthException, InvalidToken, TokenNotFound
@@ -34,7 +33,7 @@ class FirebaseAuthentication(BaseAuthentication):
         # get user model
         # User = get_user_model()
         try:
-            user, created = CustomUser.objects.get_or_create(email=uid)
+            user, created = CustomUser.objects.get_or_create(uid=uid)
             pass
         except Exception as e:
             print('this is problem', e)

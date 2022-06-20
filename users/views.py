@@ -20,8 +20,8 @@ from rest_framework import status
 class RegisterUser(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        user = CustomUser.objects.get(email=request.user.email)
+    def put(self, request):
+        user = CustomUser.objects.get(uid=request.user.uid)
         firebase_data = auth.get_user(user.email)
         user.email = firebase_data.email
         user.save()
