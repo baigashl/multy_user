@@ -72,6 +72,7 @@ class AccountInlineSerializers(serializers.ModelSerializer):
             for rate in rating:
                 total_rating += rate.rating_average()
             total_rating = format(total_rating/rating.count(), ".1f")
+        return total_rating
 
     def get_gallery_img(self, obj):
         gallery_qs = GalleryImg.objects.filter(post=obj).all()
