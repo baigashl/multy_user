@@ -20,6 +20,9 @@ class AccountInlineSerializers(serializers.ModelSerializer):
     # current_user = serializers.SerializerMethodField()
     gallery_img = serializers.SerializerMethodField(read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
+    review_office = CreateReviewOffice(many=True, read_only=True)
+    review_school = CreateReviewSchool(many=True, read_only=True)
+    review_cat_kindergarten = CreateReviewKindergarten(many=True, read_only=True)
     url = serializers.SerializerMethodField(read_only=True)
     rating = serializers.SerializerMethodField(read_only=True)
     price = serializers.SerializerMethodField(read_only=True)
@@ -36,6 +39,9 @@ class AccountInlineSerializers(serializers.ModelSerializer):
             'gallery_img',
             'gallery_video',
             'amenities',
+            'review_office',
+            'review_school',
+            'review_cat_kindergarten',
         ]
 
     def get_url(self, obj):

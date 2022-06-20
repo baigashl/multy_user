@@ -180,3 +180,6 @@ DRF_FIREBASE_AUTH = {
 AUTH_USER_MODEL = 'users.CustomUser'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ORGS_SLUGFIELD = 'django_extensions.db.fields.AutoSlugField'
+X_FRAME_OPTIONS = 'ALLOWALL'
+
+XS_SHARING_ALLOWED_METHODS = ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE']

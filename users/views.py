@@ -21,9 +21,9 @@ class RegisterUser(APIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request):
-        user = CustomUser.objects.get(uid=request.user.uid)
-        firebase_data = auth.get_user(user.email)
-        user.email = firebase_data.email
+        user = CustomUser.objects.get(email=request.user.email)
+        firebase_data = auth.get_user(user.uid)
+        user.uid = firebase_data.uid
         user.save()
         return Response({'message': 'User Registered'})
 
