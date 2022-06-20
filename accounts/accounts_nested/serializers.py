@@ -2,10 +2,11 @@ from organizations.models import Organization, OrganizationUser
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from accounts.models import Account
-from accounts.serializers import AmenitySerializer, CatSerializer
+from accounts.models import Account, Price
+from accounts.serializers import AmenitySerializer, CatSerializer, PriceSerializer
 from gallery.models import GalleryImg, PostImg, GalleryVideo, PostVideo
 from gallery.serializers import GalleryImageSerializer, GalleryVideoSerializer
+from reviews.models import ReviewSchool, ReviewKindergarten, ReviewOffice
 from reviews.serializers import (
     CreateReviewOffice, CreateReviewSchool, CreateReviewKindergarten
 )
@@ -20,6 +21,8 @@ class AccountInlineSerializers(serializers.ModelSerializer):
     gallery_img = serializers.SerializerMethodField(read_only=True)
     gallery_video = serializers.SerializerMethodField(read_only=True)
     url = serializers.SerializerMethodField(read_only=True)
+    rating = serializers.SerializerMethodField(read_only=True)
+    price = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Account
@@ -27,6 +30,8 @@ class AccountInlineSerializers(serializers.ModelSerializer):
             'url',
             'id',
             'name',
+            'price',
+            'rating',
             'account_category',
             'gallery_img',
             'gallery_video',
@@ -42,6 +47,25 @@ class AccountInlineSerializers(serializers.ModelSerializer):
             organization=obj
         )
         return OrganizationUserSerializer(qs, many=True).data
+
+    def get_price(self, obj):
+        price = Price.objects.filter(account=obj).first()
+        return PriceSerializer(price).data
+
+    def get_rating(self, obj):
+        rating = []
+        if obj.account_category.id == 1:
+            rating = ReviewSchool.objects.filter(review_account=obj.id)
+        if obj.account_category.id == 2:
+            rating = ReviewKindergarten.objects.filter(review_account=obj.id)
+        if obj.account_category.id == 3:
+            rating = ReviewOffice.objects.filter(review_account=obj.id)
+        total_rating = 0
+
+        if rating:
+            for rate in rating:
+                total_rating += rate.rating_average()
+            total_rating = format(total_rating/rating.count(), ".1f")
 
     def get_gallery_img(self, obj):
         gallery_qs = GalleryImg.objects.filter(post=obj).all()

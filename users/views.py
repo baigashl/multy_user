@@ -60,6 +60,7 @@ class UserWishListAPIView(RetrieveAPIView):
     queryset = CustomUser.objects.filter(is_active=True)
     serializer_class = UserWishListSerializer
     permission_classes = []
+    lookup_field = 'email'
 
 
 class UserListAPIView(ListAPIView):
