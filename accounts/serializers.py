@@ -124,7 +124,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
         print(delete_videos)
         for post_video in delete_videos:
             print(post_video.video.url)
-            post_video.video.delete()
+            # post_video.video.delete()
             post_video.delete()
 
     def clear_existing_images(self, instance, image_list):
@@ -190,7 +190,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                 account_image_model_instance
             )
 
-        video_list = data['gallery_video']
+        video_list = data['gallery_video'].split(',')
 
         if video_list:
             self.clear_existing_videos(instance, video_list)
