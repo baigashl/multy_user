@@ -24,6 +24,42 @@ from accounts.serializers import (
 from gallery.models import GalleryImg, GalleryVideo, PostImg, PostVideo
 
 
+class OrganizationOfficeListAPIView(ListAPIView):
+    """
+    Organization office list/create view
+    """
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # authentication_classes = [SessionAuthentication]
+    serializer_class = AccountSerializers
+    # search_fields = ('user__username', 'content')
+    queryset = Account.objects.filter(account_category=3).all()
+    lookup_field = 'id'
+
+
+class OrganizationKindergartenListAPIView(ListAPIView):
+    """
+    Organization office list/create view
+    """
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # authentication_classes = [SessionAuthentication]
+    serializer_class = AccountSerializers
+    # search_fields = ('user__username', 'content')
+    queryset = Account.objects.filter(account_category=2).all()
+    lookup_field = 'id'
+
+
+class OrganizationSchoolListAPIView(ListAPIView):
+    """
+    Organization office list/create view
+    """
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # authentication_classes = [SessionAuthentication]
+    serializer_class = AccountSerializers
+    # search_fields = ('user__username', 'content')
+    queryset = Account.objects.filter(account_category=1).all()
+    lookup_field = 'id'
+
+
 class OrganizationListAPIView(CreateModelMixin, ListAPIView):
     """
     Organization list/create view
