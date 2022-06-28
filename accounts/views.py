@@ -24,6 +24,18 @@ from accounts.serializers import (
 from gallery.models import GalleryImg, GalleryVideo, PostImg, PostVideo
 
 
+class OrganizationFeaturedListAPIView(ListAPIView):
+    """
+    Organization office list/create view
+    """
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # authentication_classes = [SessionAuthentication]
+    serializer_class = AccountSerializers
+    # search_fields = ('user__username', 'content')
+    queryset = Account.objects.filter(featured=True).all()
+    lookup_field = 'id'
+
+
 class OrganizationOfficeListAPIView(ListAPIView):
     """
     Organization office list/create view

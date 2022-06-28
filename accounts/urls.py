@@ -6,11 +6,13 @@ from accounts.views import (
     DetailCategory, ListCategory, AddRemoveWishListItemsView,
     OrganizationKindergartenListAPIView,
     OrganizationOfficeListAPIView,
-    OrganizationSchoolListAPIView
+    OrganizationSchoolListAPIView,
+    OrganizationFeaturedListAPIView
 )
 
 urlpatterns = [
     path('', OrganizationListAPIView.as_view(), name='list-organization'),
+    path('featured/', OrganizationFeaturedListAPIView.as_view(), name='featured-list-organization'),
     path('school/', OrganizationSchoolListAPIView.as_view(), name='school-list-organization'),
     path('kindergarten/', OrganizationKindergartenListAPIView.as_view(), name='kindergarten-list-organization'),
     path('office', OrganizationOfficeListAPIView.as_view(), name='office-list-organization'),
