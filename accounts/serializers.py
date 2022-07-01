@@ -96,14 +96,18 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             'gallery_img',
             'gallery_video',
             'amenities',
-            'users_wishlist'
+            'users_wishlist',
+            'paid',
+            'check'
         ]
         read_only_fields = [
             'id',
             'user',
             'owner',
             'url',
-            'users_wishlist'
+            'users_wishlist',
+            'paid',
+            'check'
         ]
 
     # def get_or_create_amenity(self, amenities):
@@ -319,8 +323,10 @@ class AccountSerializers(serializers.ModelSerializer):
             'amenities',
             'gallery_img',
             'gallery_video',
+            'paid',
+            'check'
         ]
-        read_only_fields = ['owner', 'amenities', 'rating']
+        read_only_fields = ['owner', 'amenities', 'rating', 'paid', 'check']
 
     def create(self, validated_data):
         """
