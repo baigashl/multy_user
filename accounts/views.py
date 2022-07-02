@@ -32,7 +32,7 @@ class OrganizationFeaturedListAPIView(ListAPIView):
     # authentication_classes = [SessionAuthentication]
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
-    queryset = Account.objects.filter(featured=True, check=True, paid=True).all()
+    queryset = Account.objects.filter(featured=True, check=True).all()
     lookup_field = 'id'
 
 
@@ -44,7 +44,7 @@ class OrganizationOfficeListAPIView(ListAPIView):
     # authentication_classes = [SessionAuthentication]
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
-    queryset = Account.objects.filter(account_category=3, check=True, paid=True).all()
+    queryset = Account.objects.filter(account_category=3, check=True).all()
     lookup_field = 'id'
 
 
@@ -56,7 +56,7 @@ class OrganizationKindergartenListAPIView(ListAPIView):
     # authentication_classes = [SessionAuthentication]
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
-    queryset = Account.objects.filter(account_category=2, check=True, paid=True).all()
+    queryset = Account.objects.filter(account_category=2, check=True).all()
     lookup_field = 'id'
 
 
@@ -68,7 +68,7 @@ class OrganizationSchoolListAPIView(ListAPIView):
     # authentication_classes = [SessionAuthentication]
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
-    queryset = Account.objects.filter(account_category=1, check=True, paid=True).all()
+    queryset = Account.objects.filter(account_category=1, check=True).all()
     lookup_field = 'id'
 
 
@@ -80,7 +80,7 @@ class OrganizationListAPIView(CreateModelMixin, ListAPIView):
     # authentication_classes = [SessionAuthentication]
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
-    queryset = Account.objects.filter(check=True, paid=True).all()
+    queryset = Account.objects.filter(check=True).all()
     lookup_field = 'id'
 
     def post(self, request, *args, **kwargs):
