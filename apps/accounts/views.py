@@ -29,8 +29,8 @@ class OrganizationFeaturedListAPIView(ListAPIView):
     """
     Organization office list/create view
     """
-    permission_classes = [permissions.IsAuthenticated]
-    # authentication_classes = []
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
     queryset = Account.objects.filter(featured=True, check=True).all()
