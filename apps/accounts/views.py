@@ -29,7 +29,7 @@ class OrganizationFeaturedListAPIView(ListAPIView):
     Organization office list/create view
     """
     permission_classes = [permissions.AllowAny]
-    authentication_classes = []
+    # authentication_classes = []
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
     queryset = Account.objects.filter(featured=True, check=True).all()
@@ -41,7 +41,7 @@ class OrganizationOfficeListAPIView(ListAPIView):
     Organization office list/create view
     """
     permission_classes = [permissions.AllowAny]
-    authentication_classes = []
+    # authentication_classes = []
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
     queryset = Account.objects.filter(account_category=3, check=True).all()
@@ -53,7 +53,7 @@ class OrganizationKindergartenListAPIView(ListAPIView):
     Organization office list/create view
     """
     permission_classes = [permissions.AllowAny]
-    authentication_classes = []
+    # authentication_classes = []
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
     queryset = Account.objects.filter(account_category=2, check=True).all()
@@ -65,7 +65,7 @@ class OrganizationSchoolListAPIView(ListAPIView):
     Organization office list/create view
     """
     permission_classes = [permissions.AllowAny]
-    authentication_classes = []
+    # authentication_classes = []
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
     queryset = Account.objects.filter(account_category=1, check=True).all()
@@ -77,7 +77,7 @@ class OrganizationAllListAPIView(ListAPIView):
     Organization list view
     """
     permission_classes = [permissions.AllowAny]
-    authentication_classes = []
+    # authentication_classes = []
     serializer_class = AccountSerializers
     queryset = Account.objects.filter(check=True).all()
     lookup_field = 'id'
@@ -146,7 +146,7 @@ class AccountDetailAPIView(UpdateModelMixin, DestroyModelMixin, RetrieveAPIView)
     Organization detail/update/delete view
     """
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    authentication_classes = []
+    # authentication_classes = []
     queryset = Account.objects.all()
     serializer_class = AccountDetailSerializers
     lookup_field = 'id'
