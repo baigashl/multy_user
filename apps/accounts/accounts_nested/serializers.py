@@ -34,6 +34,7 @@ class AccountInlineSerializers(serializers.ModelSerializer):
             'id',
             'name',
             'price',
+            'description',
             'rating',
             'account_category',
             'gallery_img',
