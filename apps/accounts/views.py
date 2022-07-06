@@ -1,3 +1,4 @@
+from django.contrib.messages.storage import session
 from rest_framework import mixins, status, permissions
 from rest_framework.generics import (
     RetrieveAPIView, ListAPIView, CreateAPIView, UpdateAPIView
@@ -28,7 +29,7 @@ class OrganizationFeaturedListAPIView(ListAPIView):
     """
     Organization office list/create view
     """
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     # authentication_classes = []
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
@@ -40,7 +41,7 @@ class OrganizationOfficeListAPIView(ListAPIView):
     """
     Organization office list/create view
     """
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     # authentication_classes = []
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
@@ -52,7 +53,7 @@ class OrganizationKindergartenListAPIView(ListAPIView):
     """
     Organization office list/create view
     """
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     # authentication_classes = []
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
@@ -64,7 +65,7 @@ class OrganizationSchoolListAPIView(ListAPIView):
     """
     Organization office list/create view
     """
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     # authentication_classes = []
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
@@ -76,8 +77,8 @@ class OrganizationAllListAPIView(ListAPIView):
     """
     Organization list view
     """
-    permission_classes = [permissions.AllowAny]
-    authentication_classes = []
+    permission_classes = [permissions.IsAuthenticated]
+    # authentication_classes = []
     serializer_class = AccountSerializers
     queryset = Account.objects.filter(check=True).all()
     lookup_field = 'id'
@@ -146,7 +147,7 @@ class AccountDetailAPIView(UpdateModelMixin, DestroyModelMixin, RetrieveAPIView)
     Organization detail/update/delete view
     """
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    authentication_classes = []
+    # authentication_classes = []
     queryset = Account.objects.all()
     serializer_class = AccountDetailSerializers
     lookup_field = 'id'
