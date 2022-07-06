@@ -281,6 +281,11 @@ class AccountDetailSerializers(serializers.ModelSerializer):
         return total_rating
 
     def to_representation(self, instance):
+        user = None
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            user = request.user
+
         response = super().to_representation(instance)
         amenity = response.pop("amenities")
         response['amenities'] = []
@@ -292,6 +297,10 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                 }
             )
         response['account_category'] = CatSerializer(instance.account_category).data['name_category']
+        wished = False
+        if instance.users_wishlist.filter(id=user.id).exists():
+            wished = True
+        response['wished'] = wished
         return response
 
 
