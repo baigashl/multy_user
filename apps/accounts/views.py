@@ -77,7 +77,7 @@ class OrganizationAllListAPIView(ListAPIView):
     Organization list view
     """
     permission_classes = [permissions.AllowAny]
-    # authentication_classes = []
+    authentication_classes = []
     serializer_class = AccountSerializers
     queryset = Account.objects.filter(check=True).all()
     lookup_field = 'id'
