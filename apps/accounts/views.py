@@ -146,7 +146,7 @@ class AccountDetailAPIView(UpdateModelMixin, DestroyModelMixin, RetrieveAPIView)
     Organization detail/update/delete view
     """
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    # authentication_classes = [SessionAuthentication]
+    authentication_classes = []
     queryset = Account.objects.all()
     serializer_class = AccountDetailSerializers
     lookup_field = 'id'
