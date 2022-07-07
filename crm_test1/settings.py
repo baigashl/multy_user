@@ -29,7 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 CORS_ALLOWED_ORIGINS = [
-    "hhttp://207.154.223.46/",
+    "http://207.154.223.46/",
 ]
 
 # Application definition
