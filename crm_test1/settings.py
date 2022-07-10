@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ["*"]
 CORS_ALLOWED_ORIGINS = [
     "http://studilimm.tk",
     "http://localhost:3000",
+    "http://localhost",
 ]
 
 # Application definition
