@@ -29,8 +29,8 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://studilim.com",
-    "http://studilimm.tk",
+    "https://studilim.com",
+    "https://www.studilim.com",
     "http://localhost:3000",
     "http://localhost:3001",
     "http://localhost",
