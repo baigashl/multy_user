@@ -142,12 +142,22 @@ class OrganizationListAPIView(CreateModelMixin, ListAPIView):
         serializer.save(organization_user=org_user, organization_owner=org_owner)
 
 
-class AccountDetailAPIView(UpdateModelMixin, DestroyModelMixin, RetrieveAPIView):
+class AccountDetailAPIView(RetrieveAPIView):
+    """
+    Organization detail/update/delete view
+    """
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
+    queryset = Account.objects.all()
+    serializer_class = AccountDetailSerializers
+    lookup_field = 'id'
+
+
+class AccountDetailAPIViewUpdate(UpdateModelMixin, DestroyModelMixin, RetrieveAPIView):
     """
     Organization detail/update/delete view
     """
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    # authentication_classes = []
     queryset = Account.objects.all()
     serializer_class = AccountDetailSerializers
     lookup_field = 'id'

@@ -7,7 +7,8 @@ from apps.accounts.views import (
     OrganizationOfficeListAPIView,
     OrganizationSchoolListAPIView,
     OrganizationFeaturedListAPIView,
-    OrganizationAllListAPIView
+    OrganizationAllListAPIView,
+    AccountDetailAPIViewUpdate,
 )
 
 urlpatterns = [
@@ -20,7 +21,7 @@ urlpatterns = [
     path('<int:id>/', AccountDetailAPIView.as_view(), name='detail-organization'),
     path('category/', ListCategory.as_view(), name='category'),
     path('category/<int:pk>/', DetailCategory.as_view(), name='detail_category'),
-
+    path('update/<int:id>/', AccountDetailAPIViewUpdate.as_view(), name='detail-organization-update'),
     # WishList add / remove item
     path('<int:id>/addwishlist/', AddRemoveWishListItemsView.as_view(), name='add-remove-wishlist'),
 ]
