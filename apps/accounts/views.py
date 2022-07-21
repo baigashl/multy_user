@@ -69,7 +69,7 @@ class OrganizationSchoolListAPIView(ListAPIView):
     authentication_classes = []
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
-    queryset = Account.objects.filter(account_category=1, check=True).all()
+    queryset = Account.objects.filter(account_category=1, check=True).all().order_by('-featured')
     lookup_field = 'id'
 
 
