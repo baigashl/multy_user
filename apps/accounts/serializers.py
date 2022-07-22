@@ -14,7 +14,6 @@ from apps.gallery.serializers import GalleryVideoSerializer, GalleryImageSeriali
 
 
 class ImageSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Image
         fields = (
@@ -23,7 +22,6 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class CatSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Category
         fields = (
@@ -32,7 +30,6 @@ class CatSerializer(serializers.ModelSerializer):
 
 
 class AmenitySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Amenity
         fields = (
@@ -42,7 +39,6 @@ class AmenitySerializer(serializers.ModelSerializer):
 
 
 class PriceSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Price
         fields = [
@@ -263,7 +259,6 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             vids.append(GalleryVideoSerializer(gallery_qs, many=True).data[0]['video'][i]['video'])
         return vids
 
-
     def get_rating(self, obj):
         rating = []
         if obj.account_category.id == 1:
@@ -277,9 +272,17 @@ class AccountDetailSerializers(serializers.ModelSerializer):
         if rating:
             for rate in rating:
                 total_rating += rate.rating_average()
-            total_rating = format(total_rating/rating.count(), ".1f")
+            total_rating = format(total_rating / rating.count(), ".1f")
 
         return total_rating
+
+    # def rating_object(self, instance):
+    #     if instance.account_category.id == 1:
+    #         rating = ReviewSchool.objects.filter(review_account=instance.id)
+    #     if instance.account_category.id == 2:
+    #         rating = ReviewKindergarten.objects.filter(review_account=instance.id)
+    #     if instance.account_category.id == 3:
+    #         rating = ReviewOffice.objects.filter(review_account=instance.id)
 
     def to_representation(self, instance):
         user = None
@@ -302,6 +305,36 @@ class AccountDetailSerializers(serializers.ModelSerializer):
         if instance.users_wishlist.filter(id=user.id).exists():
             wished = True
         response['wished'] = wished
+        if instance.account_category.id == 1:
+            rating = ReviewSchool.objects.filter(review_account=instance.id)
+
+            if rating:
+                purity = format(rating.aggregate(Sum('purity'))['purity__sum'] / rating.count(), ".1f")
+                nutrition = format(rating.aggregate(Sum('nutrition'))['nutrition__sum'] / rating.count(), ".1f")
+                training_program = format(rating.aggregate(Sum('training_program'))['training_program__sum'] / rating.count(), ".1f")
+                security = format(rating.aggregate(Sum('security'))['security__sum'] / rating.count(), ".1f")
+                locations = format(rating.aggregate(Sum('locations'))['locations__sum'] / rating.count(), ".1f")
+                office = format(rating.aggregate(Sum('office'))['office__sum'] / rating.count(), ".1f")
+                quality_of_education = format(rating.aggregate(Sum('quality_of_education'))['quality_of_education__sum'] / rating.count(), ".1f")
+                price_and_quality = format(rating.aggregate(Sum('price_and_quality'))['price_and_quality__sum'] / rating.count(), ".1f")
+                study_guides = format(rating.aggregate(Sum('study_guides'))['study_guides__sum'] / rating.count(), ".1f")
+                response['avg_rating'] = [
+                    {"name": "purity", "rating": purity},
+                    {"name": "nutrition", "rating": nutrition},
+                    {"name": "training_program", "rating": training_program},
+                    {"name": "security", "rating": security},
+                    {"name": "locations", "rating": locations},
+                    {"name": "office", "rating": office},
+                    {"name": "quality_of_education", "rating": quality_of_education},
+                    {"name": "price_and_quality", "rating": price_and_quality},
+                    {"name": "study_guides", "rating": study_guides},
+                ]
+
+
+        if instance.account_category.id == 2:
+            rating = ReviewKindergarten.objects.filter(review_account=instance.id)
+        if instance.account_category.id == 3:
+            rating = ReviewOffice.objects.filter(review_account=instance.id)
         return response
 
 
@@ -360,11 +393,9 @@ class AccountSerializers(serializers.ModelSerializer):
         request = self.context.get('request')
         return reverse("detail-organization", kwargs={"id": obj.id}, request=request)
 
-
     def get_price(self, obj):
         price = Price.objects.filter(account=obj).first()
         return PriceSerializer(price).data
-
 
     def get_rating(self, obj):
         rating = []
@@ -379,7 +410,7 @@ class AccountSerializers(serializers.ModelSerializer):
         if rating:
             for rate in rating:
                 total_rating += rate.rating_average()
-            total_rating = format(total_rating/rating.count(), ".1f")
+            total_rating = format(total_rating / rating.count(), ".1f")
 
         return total_rating
 
@@ -460,6 +491,7 @@ class OrganizationCreateSerializer(serializers.ModelSerializer):
     """
     organization create serializer
     """
+
     class Meta:
         model = Organization
         fields = ['name']
