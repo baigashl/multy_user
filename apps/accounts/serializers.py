@@ -79,8 +79,6 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             'name',
             'address',
             'phone',
-            'instagram',
-            'whatsapp',
             'description',
             'lat',
             'lng',
