@@ -23,6 +23,8 @@ class Migration(migrations.Migration):
                 ('featured', models.BooleanField(default=False)),
                 ('address', models.CharField(max_length=250)),
                 ('phone', models.CharField(max_length=250, blank=True, null=True)),
+                ('instagram', models.CharField(max_length=250, blank=True, null=True)),
+                ('whatsapp', models.CharField(max_length=250, blank=True, null=True)),
                 ('lat', models.DecimalField(blank=True, decimal_places=20, max_digits=50, null=True)),
                 ('lng', models.DecimalField(blank=True, decimal_places=20, max_digits=50, null=True)),
                 ('check', models.BooleanField(blank=True, default=False)),
