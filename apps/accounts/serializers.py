@@ -311,30 +311,75 @@ class AccountDetailSerializers(serializers.ModelSerializer):
             if rating:
                 purity = format(rating.aggregate(Sum('purity'))['purity__sum'] / rating.count(), ".1f")
                 nutrition = format(rating.aggregate(Sum('nutrition'))['nutrition__sum'] / rating.count(), ".1f")
-                training_program = format(rating.aggregate(Sum('training_program'))['training_program__sum'] / rating.count(), ".1f")
+                training_program = format(
+                    rating.aggregate(Sum('training_program'))['training_program__sum'] / rating.count(), ".1f")
                 security = format(rating.aggregate(Sum('security'))['security__sum'] / rating.count(), ".1f")
                 locations = format(rating.aggregate(Sum('locations'))['locations__sum'] / rating.count(), ".1f")
                 office = format(rating.aggregate(Sum('office'))['office__sum'] / rating.count(), ".1f")
-                quality_of_education = format(rating.aggregate(Sum('quality_of_education'))['quality_of_education__sum'] / rating.count(), ".1f")
-                price_and_quality = format(rating.aggregate(Sum('price_and_quality'))['price_and_quality__sum'] / rating.count(), ".1f")
-                study_guides = format(rating.aggregate(Sum('study_guides'))['study_guides__sum'] / rating.count(), ".1f")
+                quality_of_education = format(
+                    rating.aggregate(Sum('quality_of_education'))['quality_of_education__sum'] / rating.count(), ".1f")
+                price_and_quality = format(
+                    rating.aggregate(Sum('price_and_quality'))['price_and_quality__sum'] / rating.count(), ".1f")
+                study_guides = format(rating.aggregate(Sum('study_guides'))['study_guides__sum'] / rating.count(),
+                                      ".1f")
                 response['avg_rating'] = [
-                    {"name": "purity", "rating": purity},
-                    {"name": "nutrition", "rating": nutrition},
-                    {"name": "training_program", "rating": training_program},
-                    {"name": "security", "rating": security},
-                    {"name": "locations", "rating": locations},
-                    {"name": "office", "rating": office},
-                    {"name": "quality_of_education", "rating": quality_of_education},
-                    {"name": "price_and_quality", "rating": price_and_quality},
-                    {"name": "study_guides", "rating": study_guides},
+                    {"name": "чистота", "rating": purity},
+                    {"name": "питание", "rating": nutrition},
+                    {"name": "программа обучения", "rating": training_program},
+                    {"name": "безопасность", "rating": security},
+                    {"name": "локации", "rating": locations},
+                    {"name": "здание", "rating": office},
+                    {"name": "качество образования", "rating": quality_of_education},
+                    {"name": "цена и качество", "rating": price_and_quality},
+                    {"name": "учебные пособия", "rating": study_guides},
                 ]
-
 
         if instance.account_category.id == 2:
             rating = ReviewKindergarten.objects.filter(review_account=instance.id)
+
+            if rating:
+                purity = format(rating.aggregate(Sum('purity'))['purity__sum'] / rating.count(), ".1f")
+                nutrition = format(rating.aggregate(Sum('nutrition'))['nutrition__sum'] / rating.count(), ".1f")
+                activity = format(rating.aggregate(Sum('activity'))['activity__sum'] / rating.count(), ".1f")
+                upbringing = format(rating.aggregate(Sum('upbringing'))['upbringing__sum'] / rating.count(), ".1f")
+                security = format(rating.aggregate(Sum('security'))['security__sum'] / rating.count(), ".1f")
+                locations = format(rating.aggregate(Sum('locations'))['locations__sum'] / rating.count(), ".1f")
+                office = format(rating.aggregate(Sum('office'))['office__sum'] / rating.count(), ".1f")
+                baby_care = format(rating.aggregate(Sum('baby_care'))['baby_care__sum'] / rating.count(), ".1f")
+                price_and_quality = format(
+                    rating.aggregate(Sum('price_and_quality'))['price_and_quality__sum'] / rating.count(), ".1f")
+                response['avg_rating'] = [
+                    {"name": "чистота", "rating": purity},
+                    {"name": "питание", "rating": nutrition},
+                    {"name": "активность", "rating": activity},
+                    {"name": "воспитание", "rating": upbringing},
+                    {"name": "безопасность", "rating": security},
+                    {"name": "локации", "rating": locations},
+                    {"name": "здание", "rating": office},
+                    {"name": "уход за ребенком", "rating": baby_care},
+                    {"name": "цена и качество", "rating": price_and_quality},
+                ]
+
         if instance.account_category.id == 3:
             rating = ReviewOffice.objects.filter(review_account=instance.id)
+
+            if rating:
+                reputation = format(rating.aggregate(Sum('reputation'))['reputation__sum'] / rating.count(), ".1f")
+                staff = format(rating.aggregate(Sum('staff'))['staff__sum'] / rating.count(), ".1f")
+                support = format(rating.aggregate(Sum('support'))['support__sum'] / rating.count(), ".1f")
+                accompany = format(rating.aggregate(Sum('accompany'))['accompany__sum'] / rating.count(), ".1f")
+                efficiency = format(rating.aggregate(Sum('efficiency'))['efficiency__sum'] / rating.count(), ".1f")
+                price_and_quality = format(
+                    rating.aggregate(Sum('price_and_quality'))['price_and_quality__sum'] / rating.count(), ".1f")
+                response['avg_rating'] = [
+                    {"name": "репутация", "rating": reputation},
+                    {"name": "персонал", "rating": staff},
+                    {"name": "поддержка", "rating": support},
+                    {"name": "сопровождение", "rating": accompany},
+                    {"name": "эффективность", "rating": efficiency},
+                    {"name": "цена и качество", "rating": price_and_quality},
+                ]
+
         return response
 
 
