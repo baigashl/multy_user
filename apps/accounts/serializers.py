@@ -336,6 +336,20 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                     {"name": "учебные пособия", "rating": study_guides},
                 ]
 
+            else:
+                response['avg_rating'] = [
+                    {"name": "чистота", "rating": '0'},
+                    {"name": "питание", "rating": '0'},
+                    {"name": "программа обучения", "rating": '0'},
+                    {"name": "безопасность", "rating": '0'},
+                    {"name": "локации", "rating": '0'},
+                    {"name": "здание", "rating": '0'},
+                    {"name": "качество образования", "rating": '0'},
+                    {"name": "цена и качество", "rating": '0'},
+                    {"name": "учебные пособия", "rating": '0'},
+                ]
+
+
         if instance.account_category.id == 2:
             rating = ReviewKindergarten.objects.filter(review_account=instance.id)
 
@@ -361,6 +375,19 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                     {"name": "уход за ребенком", "rating": baby_care},
                     {"name": "цена и качество", "rating": price_and_quality},
                 ]
+            else:
+                response['avg_rating'] = [
+                    {"name": "чистота", "rating": '0'},
+                    {"name": "питание", "rating": '0'},
+                    {"name": "активность", "rating": '0'},
+                    {"name": "воспитание", "rating": '0'},
+                    {"name": "безопасность", "rating": '0'},
+                    {"name": "локации", "rating": '0'},
+                    {"name": "здание", "rating": '0'},
+                    {"name": "уход за ребенком", "rating": '0'},
+                    {"name": "цена и качество", "rating": '0'},
+                ]
+
 
         if instance.account_category.id == 3:
             rating = ReviewOffice.objects.filter(review_account=instance.id)
@@ -380,6 +407,15 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                     {"name": "сопровождение", "rating": accompany},
                     {"name": "эффективность", "rating": efficiency},
                     {"name": "цена и качество", "rating": price_and_quality},
+                ]
+            else:
+                response['avg_rating'] = [
+                    {"name": "репутация", "rating": '0'},
+                    {"name": "персонал", "rating": '0'},
+                    {"name": "поддержка", "rating": '0'},
+                    {"name": "сопровождение", "rating": '0'},
+                    {"name": "эффективность", "rating": '0'},
+                    {"name": "цена и качество", "rating": '0'},
                 ]
 
         return response
