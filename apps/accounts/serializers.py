@@ -330,9 +330,9 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                     {"name": "программа обучения", "rating": training_program},
                     {"name": "безопасность", "rating": security},
                     {"name": "локации", "rating": locations},
-                    {"name": "здание", "rating": office},
+                    {"name": "архитектура", "rating": office},
                     {"name": "качество образования", "rating": quality_of_education},
-                    {"name": "цена и качество", "rating": price_and_quality},
+                    {"name": "соотнощение цена/качество", "rating": price_and_quality},
                     {"name": "учебные пособия", "rating": study_guides},
                 ]
 
@@ -343,9 +343,9 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                     {"name": "программа обучения", "rating": '0'},
                     {"name": "безопасность", "rating": '0'},
                     {"name": "локации", "rating": '0'},
-                    {"name": "здание", "rating": '0'},
+                    {"name": "архитектура", "rating": '0'},
                     {"name": "качество образования", "rating": '0'},
-                    {"name": "цена и качество", "rating": '0'},
+                    {"name": "соотнощение цена/качество", "rating": '0'},
                     {"name": "учебные пособия", "rating": '0'},
                 ]
 
@@ -371,9 +371,9 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                     {"name": "воспитание", "rating": upbringing},
                     {"name": "безопасность", "rating": security},
                     {"name": "локации", "rating": locations},
-                    {"name": "здание", "rating": office},
+                    {"name": "архитектура", "rating": office},
                     {"name": "уход за ребенком", "rating": baby_care},
-                    {"name": "цена и качество", "rating": price_and_quality},
+                    {"name": "соотнощение цена/качество", "rating": price_and_quality},
                 ]
             else:
                 response['avg_rating'] = [
@@ -383,9 +383,9 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                     {"name": "воспитание", "rating": '0'},
                     {"name": "безопасность", "rating": '0'},
                     {"name": "локации", "rating": '0'},
-                    {"name": "здание", "rating": '0'},
+                    {"name": "архитектура", "rating": '0'},
                     {"name": "уход за ребенком", "rating": '0'},
-                    {"name": "цена и качество", "rating": '0'},
+                    {"name": "соотнощение цена/качество", "rating": '0'},
                 ]
 
 
