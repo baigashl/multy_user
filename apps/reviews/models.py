@@ -230,5 +230,5 @@ class ReviewText(models.Model):
     def __str__(self):
         return f"{self.id} {self.review_user}"
 
-    # def get_absolute_url(self):
-    #     return reverse('detail_kindergarten', kwargs={'pk': self.pk})
+    def get_absolute_url(self):
+        return reverse('detail_review', kwargs={'pk': self.pk})

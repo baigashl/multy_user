@@ -97,14 +97,14 @@ class CreateReviewKindergarten(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    # url = serializers.SerializerMethodField(read_only=True)
+    url = serializers.SerializerMethodField(read_only=True)
     review_user = UserPublicSerializer(read_only=True)
 
     class Meta:
         model = ReviewText
         fields = [
             'id',
-            # 'url',
+            'url',
             'timestamp',
             'review_user',
             'review_account',
@@ -112,9 +112,9 @@ class ReviewSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = [
             'id',
-            # 'url',
+            'url',
         ]
 
-    # def get_url(self, obj):
-    #     request = self.context.get('request')
-    #     return reverse("detail_kindergarten", kwargs={"id": obj.id}, request=request)
+    def get_url(self, obj):
+        request = self.context.get('request')
+        return reverse("detail_review", kwargs={"id": obj.id}, request=request)
