@@ -8,7 +8,7 @@ from organizations.models import (
 from apps.accounts.models import Image, Account, Category, Amenity, Price
 from apps.gallery.models import PostImg, GalleryImg, GalleryVideo, PostVideo
 from apps.reviews.models import ReviewSchool, ReviewOffice, ReviewKindergarten
-from apps.reviews.serializers import CreateReviewOffice, CreateReviewKindergarten, CreateReviewSchool
+from apps.reviews.serializers import CreateReviewOffice, CreateReviewKindergarten, CreateReviewSchool, ReviewSerializer
 from apps.users.users_nested.serializers import OrganizationUserSerializer
 from apps.gallery.serializers import GalleryVideoSerializer, GalleryImageSerializer
 
@@ -278,14 +278,6 @@ class AccountDetailSerializers(serializers.ModelSerializer):
 
         return total_rating
 
-    # def rating_object(self, instance):
-    #     if instance.account_category.id == 1:
-    #         rating = ReviewSchool.objects.filter(review_account=instance.id)
-    #     if instance.account_category.id == 2:
-    #         rating = ReviewKindergarten.objects.filter(review_account=instance.id)
-    #     if instance.account_category.id == 3:
-    #         rating = ReviewOffice.objects.filter(review_account=instance.id)
-
     def to_representation(self, instance):
         user = None
         request = self.context.get("request")
@@ -325,28 +317,28 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                 study_guides = format(rating.aggregate(Sum('study_guides'))['study_guides__sum'] / rating.count(),
                                       ".1f")
                 response['avg_rating'] = [
+                    {"name": "качество образования", "rating": quality_of_education},
+                    {"name": "программа обучения", "rating": training_program},
+                    {"name": "учебные пособия", "rating": study_guides},
                     {"name": "чистота", "rating": purity},
                     {"name": "питание", "rating": nutrition},
-                    {"name": "программа обучения", "rating": training_program},
                     {"name": "безопасность", "rating": security},
-                    {"name": "локации", "rating": locations},
+                    {"name": "локация", "rating": locations},
                     {"name": "здание", "rating": office},
-                    {"name": "качество образования", "rating": quality_of_education},
                     {"name": "соотнощение цена/качество", "rating": price_and_quality},
-                    {"name": "учебные пособия", "rating": study_guides},
                 ]
 
             else:
                 response['avg_rating'] = [
+                    {"name": "качество образования", "rating": '0'},
+                    {"name": "программа обучения", "rating": '0'},
+                    {"name": "учебные пособия", "rating": '0'},
                     {"name": "чистота", "rating": '0'},
                     {"name": "питание", "rating": '0'},
-                    {"name": "программа обучения", "rating": '0'},
                     {"name": "безопасность", "rating": '0'},
-                    {"name": "локации", "rating": '0'},
+                    {"name": "локация", "rating": '0'},
                     {"name": "здание", "rating": '0'},
-                    {"name": "качество образования", "rating": '0'},
                     {"name": "соотнощение цена/качество", "rating": '0'},
-                    {"name": "учебные пособия", "rating": '0'},
                 ]
 
 
@@ -365,26 +357,26 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                 price_and_quality = format(
                     rating.aggregate(Sum('price_and_quality'))['price_and_quality__sum'] / rating.count(), ".1f")
                 response['avg_rating'] = [
+                    {"name": "уход за ребенком", "rating": baby_care},
+                    {"name": "воспитание", "rating": upbringing},
                     {"name": "чистота", "rating": purity},
                     {"name": "питание", "rating": nutrition},
                     {"name": "активность", "rating": activity},
-                    {"name": "воспитание", "rating": upbringing},
                     {"name": "безопасность", "rating": security},
                     {"name": "локации", "rating": locations},
                     {"name": "архитектура", "rating": office},
-                    {"name": "уход за ребенком", "rating": baby_care},
                     {"name": "соотнощение цена/качество", "rating": price_and_quality},
                 ]
             else:
                 response['avg_rating'] = [
+                    {"name": "уход за ребенком", "rating": '0'},
+                    {"name": "воспитание", "rating": '0'},
                     {"name": "чистота", "rating": '0'},
                     {"name": "питание", "rating": '0'},
                     {"name": "активность", "rating": '0'},
-                    {"name": "воспитание", "rating": '0'},
                     {"name": "безопасность", "rating": '0'},
                     {"name": "локации", "rating": '0'},
                     {"name": "архитектура", "rating": '0'},
-                    {"name": "уход за ребенком", "rating": '0'},
                     {"name": "соотнощение цена/качество", "rating": '0'},
                 ]
 
