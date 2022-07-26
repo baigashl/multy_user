@@ -406,7 +406,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                     {"name": "поддержка", "rating": support},
                     {"name": "сопровождение", "rating": accompany},
                     {"name": "эффективность", "rating": efficiency},
-                    {"name": "цена и качество", "rating": price_and_quality},
+                    {"name": "соотнощение цена/качество", "rating": price_and_quality},
                 ]
             else:
                 response['avg_rating'] = [
@@ -415,7 +415,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                     {"name": "поддержка", "rating": '0'},
                     {"name": "сопровождение", "rating": '0'},
                     {"name": "эффективность", "rating": '0'},
-                    {"name": "цена и качество", "rating": '0'},
+                    {"name": "соотнощение цена/качество", "rating": '0'},
                 ]
 
         return response
