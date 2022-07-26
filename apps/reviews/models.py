@@ -10,7 +10,7 @@ from apps.users.models import CustomUser
 class ReviewSchool(models.Model):
     review_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='review_school')
     review_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='review_school_user')
-    review = models.TextField()
+    review = models.TextField(blank=True, null=True)
     purity = models.IntegerField(
         validators=[MinValueValidator(1),
                     MaxValueValidator(10)],
@@ -80,7 +80,7 @@ class ReviewSchool(models.Model):
     rating_average.short_description = "Avg."
 
     def __str__(self):
-        return f"{self.review}"
+        return f"{self.id} {self.review_user}"
 
     def get_absolute_url(self):
         return reverse('detail_school', kwargs={'pk': self.pk})
@@ -89,7 +89,7 @@ class ReviewSchool(models.Model):
 class ReviewOffice(models.Model):
     review_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='review_office')
     review_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='review_office_user')
-    review = models.TextField()
+    review = models.TextField(blank=True, null=True)
     reputation = models.IntegerField(
         validators=[MinValueValidator(1),
                     MaxValueValidator(10)],
@@ -137,7 +137,7 @@ class ReviewOffice(models.Model):
     rating_average.short_description = "Avg."
 
     def __str__(self):
-        return f"{self.review}"
+        return f"{self.id} {self.review_user}"
 
     def get_absolute_url(self):
         return reverse('detail_office', kwargs={'pk': self.pk})
@@ -146,7 +146,7 @@ class ReviewOffice(models.Model):
 class ReviewKindergarten(models.Model):
     review_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='review_cat_kindergarten')
     review_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='review_kindergarten_user')
-    review = models.TextField()
+    review = models.TextField(blank=True, null=True)
     purity = models.IntegerField(
         validators=[MinValueValidator(1),
                     MaxValueValidator(10)],
@@ -214,7 +214,21 @@ class ReviewKindergarten(models.Model):
     rating_average.short_description = "Avg."
 
     def __str__(self):
-        return f"{self.review}"
+        return f"{self.id} {self.review_user}"
 
     def get_absolute_url(self):
         return reverse('detail_kindergarten', kwargs={'pk': self.pk})
+
+
+class ReviewText(models.Model):
+    review_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='review_text')
+    review_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='review_user')
+    review = models.TextField()
+    update = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.id} {self.review_user}"
+
+    # def get_absolute_url(self):
+    #     return reverse('detail_kindergarten', kwargs={'pk': self.pk})

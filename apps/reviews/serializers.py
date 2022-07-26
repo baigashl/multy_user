@@ -2,7 +2,7 @@ from apps.accounts.models import Account
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from apps.reviews.models import ReviewSchool, ReviewOffice, ReviewKindergarten
+from apps.reviews.models import ReviewSchool, ReviewOffice, ReviewKindergarten, ReviewText
 from apps.users.users_nested.serializers import UserPublicSerializer
 
 
@@ -95,3 +95,26 @@ class CreateReviewKindergarten(serializers.ModelSerializer):
         super(CreateReviewKindergarten, self).__init__(*args, **kwargs)
         self.fields['review_account'].queryset = Account.objects.filter(account_category__name_category='kindergarten')
 
+
+class ReviewSerializer(serializers.ModelSerializer):
+    # url = serializers.SerializerMethodField(read_only=True)
+    review_user = UserPublicSerializer(read_only=True)
+
+    class Meta:
+        model = ReviewText
+        fields = [
+            'id',
+            # 'url',
+            'timestamp',
+            'review_user',
+            'review_account',
+            'review',
+        ]
+        read_only_fields = [
+            'id',
+            # 'url',
+        ]
+
+    # def get_url(self, obj):
+    #     request = self.context.get('request')
+    #     return reverse("detail_kindergarten", kwargs={"id": obj.id}, request=request)

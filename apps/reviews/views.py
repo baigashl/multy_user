@@ -1,7 +1,7 @@
 from rest_framework import mixins, generics
 from rest_framework.generics import ListAPIView
-from apps.reviews.models import ReviewSchool, ReviewOffice, ReviewKindergarten
-from apps.reviews.serializers import CreateReviewSchool, CreateReviewOffice, CreateReviewKindergarten
+from apps.reviews.models import ReviewSchool, ReviewOffice, ReviewKindergarten, ReviewText
+from apps.reviews.serializers import CreateReviewSchool, CreateReviewOffice, CreateReviewKindergarten, ReviewSerializer
 
 
 class ListOffice(mixins.CreateModelMixin, ListAPIView):
@@ -118,6 +118,47 @@ class DetailKindergarten(
     permission_classes = []
     queryset = ReviewKindergarten.objects.all()
     serializer_class = CreateReviewKindergarten
+    lookup_field = 'id'
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+class ListReview(mixins.CreateModelMixin, generics.ListAPIView):
+    permission_classes = []
+    # authentication_classes = [SessionAuthentication]
+    serializer_class = ReviewSerializer
+    passed_id = None
+
+    def get_queryset(self):
+        request = self.request
+        qs = ReviewText.objects.all()
+        query = request.GET.get('q')
+        if query is not None:
+            qs = qs.filter(content__icontains=query)
+        return qs
+
+    def post(self, *args, **kwargs):
+        return self.create(*args, **kwargs)
+
+    def perform_create(self, serializer):
+        review_user = self.request.user
+        serializer.save(review_user=review_user)
+
+
+class DetailReview(
+    mixins.DestroyModelMixin,
+    mixins.UpdateModelMixin,
+    generics.RetrieveAPIView,
+):
+    permission_classes = []
+    queryset = ReviewText.objects.all()
+    serializer_class = ReviewSerializer
     lookup_field = 'id'
 
     def delete(self, request, *args, **kwargs):
