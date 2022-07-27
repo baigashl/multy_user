@@ -8,7 +8,7 @@ from organizations.models import (
 from apps.accounts.models import Image, Account, Category, Amenity, Price
 from apps.gallery.models import PostImg, GalleryImg, GalleryVideo, PostVideo
 from apps.reviews.models import ReviewSchool, ReviewOffice, ReviewKindergarten
-from apps.reviews.serializers import CreateReviewOffice, CreateReviewKindergarten, CreateReviewSchool, ReviewSerializer
+from apps.reviews.serializers import CreateReviewOffice, CreateReviewKindergarten, CreateReviewSchool
 from apps.users.users_nested.serializers import OrganizationUserSerializer
 from apps.gallery.serializers import GalleryVideoSerializer, GalleryImageSerializer
 

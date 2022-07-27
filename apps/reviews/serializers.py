@@ -2,7 +2,7 @@ from apps.accounts.models import Account
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from apps.reviews.models import ReviewSchool, ReviewOffice, ReviewKindergarten, ReviewText
+from apps.reviews.models import ReviewSchool, ReviewOffice, ReviewKindergarten
 from apps.users.users_nested.serializers import UserPublicSerializer
 
 
@@ -21,6 +21,7 @@ class CreateReviewSchool(serializers.ModelSerializer):
             'purity', 'nutrition', 'training_program',
             'security', 'locations', 'office', 'quality_of_education',
             'price_and_quality', 'study_guides', 'rating_average',
+            'teachers',
         ]
         read_only_fields = [
             'id',
@@ -96,25 +97,25 @@ class CreateReviewKindergarten(serializers.ModelSerializer):
         self.fields['review_account'].queryset = Account.objects.filter(account_category__name_category='kindergarten')
 
 
-class ReviewSerializer(serializers.ModelSerializer):
-    url = serializers.SerializerMethodField(read_only=True)
-    review_user = UserPublicSerializer(read_only=True)
-
-    class Meta:
-        model = ReviewText
-        fields = [
-            'id',
-            'url',
-            'timestamp',
-            'review_user',
-            'review_account',
-            'review',
-        ]
-        read_only_fields = [
-            'id',
-            'url',
-        ]
-
-    def get_url(self, obj):
-        request = self.context.get('request')
-        return reverse("detail_review", kwargs={"id": obj.id}, request=request)
+# class ReviewSerializer(serializers.ModelSerializer):
+#     url = serializers.SerializerMethodField(read_only=True)
+#     review_user = UserPublicSerializer(read_only=True)
+#
+#     class Meta:
+#         model = ReviewText
+#         fields = [
+#             'id',
+#             'url',
+#             'timestamp',
+#             'review_user',
+#             'review_account',
+#             'review',
+#         ]
+#         read_only_fields = [
+#             'id',
+#             'url',
+#         ]
+#
+#     def get_url(self, obj):
+#         request = self.context.get('request')
+#         return reverse("detail_review", kwargs={"id": obj.id}, request=request)
