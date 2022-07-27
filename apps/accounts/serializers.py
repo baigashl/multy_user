@@ -316,10 +316,12 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                     rating.aggregate(Sum('price_and_quality'))['price_and_quality__sum'] / rating.count(), ".1f")
                 study_guides = format(rating.aggregate(Sum('study_guides'))['study_guides__sum'] / rating.count(),
                                       ".1f")
+                teachers = format(rating.aggregate(Sum('teachers'))['teachers__sum'] / rating.count(), ".1f")
                 response['avg_rating'] = [
                     {"name": "качество образования", "rating": quality_of_education},
                     {"name": "программа обучения", "rating": training_program},
                     {"name": "учебные пособия", "rating": study_guides},
+                    {"name": "преподаватели", "rating": teachers},
                     {"name": "чистота", "rating": purity},
                     {"name": "питание", "rating": nutrition},
                     {"name": "безопасность", "rating": security},

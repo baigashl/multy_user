@@ -19,9 +19,9 @@ class CreateReviewSchool(serializers.ModelSerializer):
             'review_user',
             'review_account', 'review',
             'purity', 'nutrition', 'training_program',
+            'teachers',
             'security', 'locations', 'office', 'quality_of_education',
             'price_and_quality', 'study_guides', 'rating_average',
-            'teachers',
         ]
         read_only_fields = [
             'id',

@@ -81,7 +81,7 @@ class ReviewSchool(models.Model):
             + self.price_and_quality
             + self.study_guides
             + self.teachers
-        ) / 9
+        ) / 10
         return round(avg, 1)
 
     rating_average.short_description = "Avg."
