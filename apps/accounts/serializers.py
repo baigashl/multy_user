@@ -335,6 +335,7 @@ class AccountDetailSerializers(serializers.ModelSerializer):
                     {"name": "качество образования", "rating": '0'},
                     {"name": "программа обучения", "rating": '0'},
                     {"name": "учебные пособия", "rating": '0'},
+                    {"name": "преподаватели", "rating": '0'},
                     {"name": "чистота", "rating": '0'},
                     {"name": "питание", "rating": '0'},
                     {"name": "безопасность", "rating": '0'},
