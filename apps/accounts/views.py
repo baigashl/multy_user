@@ -33,8 +33,16 @@ class OrganizationFeaturedListAPIView(ListAPIView):
     authentication_classes = []
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
-    queryset = Account.objects.filter(featured=True, check=True).all()
-    lookup_field = 'id'
+    # queryset = Account.objects.filter(featured=True, check=True).all()
+    # lookup_field = 'id'
+
+    def get_queryset(self):
+        request = self.request
+        qs = Account.objects.filter(check=True).all().order_by('-featured')
+        query = request.GET.get('q')
+        if query is not None:
+            qs = qs.filter(name__icontains=query)
+        return qs
 
 
 class OrganizationOfficeListAPIView(ListAPIView):
@@ -45,8 +53,16 @@ class OrganizationOfficeListAPIView(ListAPIView):
     authentication_classes = []
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
-    queryset = Account.objects.filter(account_category=3, check=True).all()
-    lookup_field = 'id'
+    # queryset = Account.objects.filter(account_category=3, check=True).all()
+    # lookup_field = 'id'
+
+    def get_queryset(self):
+        request = self.request
+        qs = Account.objects.filter(account_category=3, check=True).all().order_by('-featured')
+        query = request.GET.get('q')
+        if query is not None:
+            qs = qs.filter(name__icontains=query)
+        return qs
 
 
 class OrganizationKindergartenListAPIView(ListAPIView):
@@ -57,8 +73,17 @@ class OrganizationKindergartenListAPIView(ListAPIView):
     authentication_classes = []
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
-    queryset = Account.objects.filter(account_category=2, check=True).all()
-    lookup_field = 'id'
+    # queryset = Account.objects.filter(account_category=2, check=True).all()
+    # lookup_field = 'id'
+
+    def get_queryset(self):
+        request = self.request
+        qs = Account.objects.filter(account_category=2, check=True).all().order_by('-featured')
+        query = request.GET.get('q')
+        if query is not None:
+            qs = qs.filter(name__icontains=query)
+        print(query)
+        return qs
 
 
 class OrganizationSchoolListAPIView(ListAPIView):
@@ -69,8 +94,16 @@ class OrganizationSchoolListAPIView(ListAPIView):
     authentication_classes = []
     serializer_class = AccountSerializers
     # search_fields = ('user__username', 'content')
-    queryset = Account.objects.filter(account_category=1, check=True).all().order_by('-featured')
+    # queryset = Account.objects.filter(account_category=1, check=True).all().order_by('-featured')
     lookup_field = 'id'
+
+    def get_queryset(self):
+        request = self.request
+        qs = Account.objects.filter(account_category=1, check=True).all().order_by('-featured')
+        query = request.GET.get('q')
+        if query is not None:
+            qs = qs.filter(name__icontains=query)
+        return qs
 
 
 class OrganizationAllListAPIView(ListAPIView):
